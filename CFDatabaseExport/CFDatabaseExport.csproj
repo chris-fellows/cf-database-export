@@ -1,0 +1,253 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{C1D48ED3-AAF7-40A5-897B-3134B02F0E6D}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>CFDatabaseExport</RootNamespace>
+    <AssemblyName>CFDatabaseExport</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="CarlosAg.ExcelXmlWriter">
+      <HintPath>..\Third Party\Carlos.AgExcelWriter\CarlosAg.ExcelXmlWriter.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ApplicationObject.cs" />
+    <Compile Include="ColumnFormat.cs" />
+    <Compile Include="ColumnFormats.cs" />
+    <Compile Include="Controls\ListItemsUserControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\ListItemsUserControl.Designer.cs">
+      <DependentUpon>ListItemsUserControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DatabaseType.cs" />
+    <Compile Include="Factory.cs" />
+    <Compile Include="IQueryExecutor.cs" />
+    <Compile Include="LocalNameValuePair.cs" />
+    <Compile Include="OpenFileQueryExecutor.cs" />
+    <Compile Include="Repository\IDatabaseInfoRepository.cs" />
+    <Compile Include="Repository\IDatabaseTypeRepository.cs" />
+    <Compile Include="IProgress.cs" />
+    <Compile Include="Repository\IQueryFunctionRepository.cs" />
+    <Compile Include="Repository\IQueryRepository.cs" />
+    <Compile Include="OpenFileQuery.cs" />
+    <Compile Include="OutputFormat.cs" />
+    <Compile Include="ParametersForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ParametersForm.Designer.cs">
+      <DependentUpon>ParametersForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Query.cs" />
+    <Compile Include="QueryHandler\IQueryHandler.cs" />
+    <Compile Include="QueryHandler\QueryHandlerJSON.cs" />
+    <Compile Include="QueryHandler\QueryHandlerXLS.cs" />
+    <Compile Include="QueryHandler\QueryHandlerXSLT.cs" />
+    <Compile Include="QueryOptions\Controls\ControlOptionsCSV.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="QueryOptions\Controls\ControlOptionsCSV.Designer.cs">
+      <DependentUpon>ControlOptionsCSV.cs</DependentUpon>
+    </Compile>
+    <Compile Include="QueryOptions\Controls\ControlOptionsGrid.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="QueryOptions\Controls\ControlOptionsGrid.Designer.cs">
+      <DependentUpon>ControlOptionsGrid.cs</DependentUpon>
+    </Compile>
+    <Compile Include="QueryOptions\Controls\ControlOptionsHTML.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="QueryOptions\Controls\ControlOptionsHTML.Designer.cs">
+      <DependentUpon>ControlOptionsHTML.cs</DependentUpon>
+    </Compile>
+    <Compile Include="QueryOptions\Controls\ControlOptionsJSON.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="QueryOptions\Controls\ControlOptionsJSON.Designer.cs">
+      <DependentUpon>ControlOptionsJSON.cs</DependentUpon>
+    </Compile>
+    <Compile Include="QueryOptions\Controls\ControlOptionsSQL.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="QueryOptions\Controls\ControlOptionsSQL.Designer.cs">
+      <DependentUpon>ControlOptionsSQL.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DatabaseInfo.cs" />
+    <Compile Include="QueryOptions\Controls\ControlOptionsXLS.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="QueryOptions\Controls\ControlOptionsXLS.Designer.cs">
+      <DependentUpon>ControlOptionsXLS.cs</DependentUpon>
+    </Compile>
+    <Compile Include="QueryOptions\Controls\ControlOptionsXML.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="QueryOptions\Controls\ControlOptionsXML.Designer.cs">
+      <DependentUpon>ControlOptionsXML.cs</DependentUpon>
+    </Compile>
+    <Compile Include="QueryOptions\Controls\ControlOptionsXSLT.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="QueryOptions\Controls\ControlOptionsXSLT.Designer.cs">
+      <DependentUpon>ControlOptionsXSLT.cs</DependentUpon>
+    </Compile>
+    <Compile Include="QueryOptions\Controls\IControlOptions.cs" />
+    <Compile Include="QueryOptions\QueryOptionsJSON.cs" />
+    <Compile Include="QueryOptions\QueryOptionsXLS.cs" />
+    <Compile Include="QueryOptions\QueryOptionsXSLT.cs" />
+    <Compile Include="Repository\Xml\XmlDatabaseInfoRepository.cs" />
+    <Compile Include="Repository\Xml\XmlDatabaseTypeRepository.cs" />
+    <Compile Include="Repository\Xml\XmlQueryFunctionRepository.cs" />
+    <Compile Include="Repository\Xml\XmlQueryRespository1.cs" />
+    <Compile Include="SampleOutputFormat.cs" />
+    <Compile Include="Samples.cs" />
+    <Compile Include="ScriptFunction.cs" />
+    <Compile Include="ScriptFunctionSelectItem.cs" />
+    <Compile Include="Utilities\Database1Builder.cs" />
+    <Compile Include="Utilities\DeveloperUtilities.cs" />
+    <Compile Include="ItemList.cs" />
+    <Compile Include="QueryFunction.cs" />
+    <Compile Include="QueryFunctionListItem.cs" />
+    <Compile Include="QueryHandler\QueryHandlerCSV.cs" />
+    <Compile Include="QueryHandler\QueryHandlerGrid.cs" />
+    <Compile Include="QueryHandler\QueryHandlerHTML.cs" />
+    <Compile Include="QueryHandler\QueryHandlerSQL.cs" />
+    <Compile Include="QueryHandler\QueryHandlerXML.cs" />
+    <Compile Include="SQLQueryExecutor.cs" />
+    <Compile Include="QueryOptions\QueryOptions.cs" />
+    <Compile Include="QueryOptions\QueryOptionsCSV.cs" />
+    <Compile Include="QueryOptions\QueryOptionsGrid.cs" />
+    <Compile Include="QueryOptions\QueryOptionsHTML.cs" />
+    <Compile Include="QueryOptions\QueryOptionsSQL.cs" />
+    <Compile Include="QueryOptions\QueryOptionsXML.cs" />
+    <Compile Include="QueryParser.cs" />
+    <Compile Include="MainForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MainForm.Designer.cs">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SQLQuery.cs" />
+    <Compile Include="Utilities\UIUtilities.cs" />
+    <EmbeddedResource Include="Controls\ListItemsUserControl.resx">
+      <DependentUpon>ListItemsUserControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ParametersForm.resx">
+      <DependentUpon>ParametersForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="QueryOptions\Controls\ControlOptionsCSV.resx">
+      <DependentUpon>ControlOptionsCSV.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="QueryOptions\Controls\ControlOptionsGrid.resx">
+      <DependentUpon>ControlOptionsGrid.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="QueryOptions\Controls\ControlOptionsHTML.resx">
+      <DependentUpon>ControlOptionsHTML.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="QueryOptions\Controls\ControlOptionsJSON.resx">
+      <DependentUpon>ControlOptionsJSON.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="QueryOptions\Controls\ControlOptionsSQL.resx">
+      <DependentUpon>ControlOptionsSQL.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MainForm.resx">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <EmbeddedResource Include="QueryOptions\Controls\ControlOptionsXLS.resx">
+      <DependentUpon>ControlOptionsXLS.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="QueryOptions\Controls\ControlOptionsXML.resx">
+      <DependentUpon>ControlOptionsXML.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="QueryOptions\Controls\ControlOptionsXSLT.resx">
+      <DependentUpon>ControlOptionsXSLT.cs</DependentUpon>
+    </EmbeddedResource>
+    <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Notes.htm" />
+    <Content Include="Resources\PlayButton_32x32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\cf-utilities\CFUtilities\CFUtilities.csproj">
+      <Project>{35d2f2d8-23f9-40c7-9905-0ebbc6bf61e5}</Project>
+      <Name>CFUtilities</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

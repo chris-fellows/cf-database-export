@@ -1,0 +1,51 @@
+<html>
+	<head>
+		<link REL="StyleSheet" TYPE="text/css" HREF="../Default.css"/> 
+	</head>
+	<body>
+	<h2>CFDatabaseExport</h2>
+Utility for exporting data from any OLEDB database to CSV, HTML, XML, Excel or a SQL script. The user selects the SQL query and output format and the data is exported in the required format.<br/><br/>
+<h3>Output formats</h3>
+<table>
+	<th>Format</th>
+	<th>Comments</th>
+	<tr>
+		<td>CSV file</td>
+		<td>Output each resultset returned by the SQL query to a separate CSV file.</td>
+	</tr>
+	<tr>
+		<td>HTML</td>
+		<td>Takes a template HTML file and inserts an HTML TABLE element with each resultset returned by the SQL query.</td>
+	</tr>
+	<tr>
+		<td>XML</td>
+		<td>Exports all rows to an XML file.</td>
+	</tr>
+	<tr>
+		<td>Excel</td>
+		<td></td>
+	</tr>
+    <tr>
+        <td>JSON</td>
+        <td>Exports all rows to JSON format.</td>
+    </tr>
+	<tr>
+		<td>SQL script</td>
+		<td>Takes two SQL templates, one for the main part of the script and one for each row and produces a new SQL script. The main template requires a placeholder where the SQL for each row will be inserted. <br/><br/>
+    For example:
+    <ul>
+      <li>Main script creates a temporary table, defines the placeholder for the rows, and then the SQL for processing the temporary table and writing the data to a database table.</li>
+      <li>The row template takes selected columns from the resultset and inserts the row in to the temporary table defines in the main script.</li>
+    </ul>
+  </td>
+	</tr>
+  <tr>
+    <td>Any format</td>
+    <td>Takes an XSL transform file and transforms the resultset. For example, Transform to an XML or HTML file.</td>
+  </tr>
+</table><br/><br/>
+Note: I developed a similar tool while working for a previous employer. (It was actually developed from my own idea on my own time because I was spending so much time responding to data requests and having to write a new query each time.) CFDatabaseExport was written from scratch on my own time and it does not use any of the original code.
+	<br/><br/>
+	<a href="../Index.htm#ACFDatabaseExport">Back to Index</a>
+	</body>
+</html>
