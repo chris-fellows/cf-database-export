@@ -55,33 +55,33 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplicationObject.cs" />
-    <Compile Include="ColumnFormat.cs" />
-    <Compile Include="ColumnFormats.cs" />
+    <Compile Include="Models\ColumnFormat.cs" />
+    <Compile Include="Models\ColumnFormats.cs" />
     <Compile Include="Controls\ListItemsUserControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Controls\ListItemsUserControl.Designer.cs">
       <DependentUpon>ListItemsUserControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="DatabaseType.cs" />
+    <Compile Include="Models\DatabaseType.cs" />
     <Compile Include="Factory.cs" />
     <Compile Include="IQueryExecutor.cs" />
-    <Compile Include="LocalNameValuePair.cs" />
+    <Compile Include="Models\LocalNameValuePair.cs" />
     <Compile Include="OpenFileQueryExecutor.cs" />
     <Compile Include="Repository\IDatabaseInfoRepository.cs" />
     <Compile Include="Repository\IDatabaseTypeRepository.cs" />
     <Compile Include="IProgress.cs" />
     <Compile Include="Repository\IQueryFunctionRepository.cs" />
     <Compile Include="Repository\IQueryRepository.cs" />
-    <Compile Include="OpenFileQuery.cs" />
-    <Compile Include="OutputFormat.cs" />
-    <Compile Include="ParametersForm.cs">
+    <Compile Include="Models\OpenFileQuery.cs" />
+    <Compile Include="Models\OutputFormat.cs" />
+    <Compile Include="Forms\ParametersForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ParametersForm.Designer.cs">
+    <Compile Include="Forms\ParametersForm.Designer.cs">
       <DependentUpon>ParametersForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Query.cs" />
+    <Compile Include="Models\Query.cs" />
     <Compile Include="QueryHandler\IQueryHandler.cs" />
     <Compile Include="QueryHandler\QueryHandlerJSON.cs" />
     <Compile Include="QueryHandler\QueryHandlerXLS.cs" />
@@ -116,7 +116,7 @@
     <Compile Include="QueryOptions\Controls\ControlOptionsSQL.Designer.cs">
       <DependentUpon>ControlOptionsSQL.cs</DependentUpon>
     </Compile>
-    <Compile Include="DatabaseInfo.cs" />
+    <Compile Include="Models\DatabaseInfo.cs" />
     <Compile Include="QueryOptions\Controls\ControlOptionsXLS.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -143,15 +143,15 @@
     <Compile Include="Repository\Xml\XmlDatabaseTypeRepository.cs" />
     <Compile Include="Repository\Xml\XmlQueryFunctionRepository.cs" />
     <Compile Include="Repository\Xml\XmlQueryRespository1.cs" />
-    <Compile Include="SampleOutputFormat.cs" />
+    <Compile Include="Models\SampleOutputFormat.cs" />
     <Compile Include="Samples.cs" />
-    <Compile Include="ScriptFunction.cs" />
-    <Compile Include="ScriptFunctionSelectItem.cs" />
+    <Compile Include="Models\ScriptFunction.cs" />
+    <Compile Include="Models\ScriptFunctionSelectItem.cs" />
     <Compile Include="Utilities\Database1Builder.cs" />
     <Compile Include="Utilities\DeveloperUtilities.cs" />
-    <Compile Include="ItemList.cs" />
-    <Compile Include="QueryFunction.cs" />
-    <Compile Include="QueryFunctionListItem.cs" />
+    <Compile Include="Models\ItemList.cs" />
+    <Compile Include="Models\QueryFunction.cs" />
+    <Compile Include="Models\QueryFunctionListItem.cs" />
     <Compile Include="QueryHandler\QueryHandlerCSV.cs" />
     <Compile Include="QueryHandler\QueryHandlerGrid.cs" />
     <Compile Include="QueryHandler\QueryHandlerHTML.cs" />
@@ -165,20 +165,20 @@
     <Compile Include="QueryOptions\QueryOptionsSQL.cs" />
     <Compile Include="QueryOptions\QueryOptionsXML.cs" />
     <Compile Include="QueryParser.cs" />
-    <Compile Include="MainForm.cs">
+    <Compile Include="Forms\MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MainForm.Designer.cs">
+    <Compile Include="Forms\MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SQLQuery.cs" />
+    <Compile Include="Models\SQLQuery.cs" />
     <Compile Include="Utilities\UIUtilities.cs" />
     <EmbeddedResource Include="Controls\ListItemsUserControl.resx">
       <DependentUpon>ListItemsUserControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ParametersForm.resx">
+    <EmbeddedResource Include="Forms\ParametersForm.resx">
       <DependentUpon>ParametersForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="QueryOptions\Controls\ControlOptionsCSV.resx">
@@ -196,7 +196,7 @@
     <EmbeddedResource Include="QueryOptions\Controls\ControlOptionsSQL.resx">
       <DependentUpon>ControlOptionsSQL.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="MainForm.resx">
+    <EmbeddedResource Include="Forms\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
