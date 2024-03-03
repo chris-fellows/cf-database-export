@@ -8,8 +8,9 @@ using System.IO;
 using System.Threading.Tasks;
 using System.Data;
 using System.Data.SqlClient;
+using CFDatabaseExport.Models;
 
-namespace CFDatabaseExport
+namespace CFDatabaseExport.QueryHandlers
 {
     /// <summary>
     /// Handles output of query to SQL file from template

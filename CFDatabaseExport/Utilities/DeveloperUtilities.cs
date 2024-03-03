@@ -5,12 +5,13 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using System.Data;
+using CFDatabaseExport.Models;
 using CFUtilities.XML;
 using CFUtilities.CSV;
 
 namespace CFDatabaseExport
 {
-    class DeveloperUtilities
+    internal class DeveloperUtilities
     {
         public static void CreateDatabaseInfos(string outputFolder)
         {

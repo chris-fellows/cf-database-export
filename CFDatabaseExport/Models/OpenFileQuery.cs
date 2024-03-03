@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CFDatabaseExport
+namespace CFDatabaseExport.Models
 {
     /// <summary>
     /// Query that executes when a file is opened. E.g. Open Excel spreadsheet that runs a macro

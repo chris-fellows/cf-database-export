@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using CFDatabaseExport.Forms;
+using CFDatabaseExport.Models;
 using CFUtilities.Databases;
 
 namespace CFDatabaseExport
@@ -10,7 +12,7 @@ namespace CFDatabaseExport
     /// <summary>
     /// Parses the query, replaces any functions
     /// </summary>
-    public class QueryParser
+    internal class QueryParserService
     {
         private const string _functionPrefix = "##";
 

@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 using System.Data;
 using System.IO;
 using CarlosAg.ExcelXmlWriter;
+using CFDatabaseExport.Models;
 
-namespace CFDatabaseExport
+namespace CFDatabaseExport.QueryHandlers
 {
     /// <summary>
     /// Handles output of query to XLS file

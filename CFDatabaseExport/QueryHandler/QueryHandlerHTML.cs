@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 using System.Data;
 using System.Data.SqlClient;
 using System.IO;
+using CFDatabaseExport.Models;
 
-namespace CFDatabaseExport
+namespace CFDatabaseExport.QueryHandlers
 {
     /// <summary>
     /// Handles output of query to HTML file

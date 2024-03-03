@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.IO;
 using System.Xml.Serialization;
 
-namespace CFDatabaseExport
+namespace CFDatabaseExport.Models
 {
     [Serializable]
     public class SQLQuery : Query

@@ -1,23 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.IO;
+using CFDatabaseExport.Models;
+using CFDatabaseExport.QueryHandlers;
+using CFDatabaseExport.Services;
 using CFUtilities;
 using CFUtilities.XML;
 using CFUtilities.Logging;
 using CFUtilities.Databases;
 
-namespace CFDatabaseExport
+namespace CFDatabaseExport.Forms
 {
     public partial class MainForm : Form, IProgress
     {
         private IQueryRepository _queryRespository = null;
+        private ConfigurationService _configurationService = new ConfigurationService();
         private ILogWriter _logWriter = null;
         private List<DatabaseInfo> _databaseInfoList = new List<DatabaseInfo>();
 
@@ -31,8 +30,8 @@ namespace CFDatabaseExport
             //Database1Builder.CreateDatabase1(@"C:\Data\Development\C#\CFDatabaseExport\bin\Debug\Data\Databases\Order Database");
             //DeveloperUtilities.CreateFunctions(@"C:\Data\Database Utilities\Function");
 
-            _queryRespository = Factory.GetDefaultQueryRepository();
-            _logWriter = Factory.GetDefaultLogWriter();
+            _queryRespository = _configurationService.GetDefaultQueryRepository();
+            _logWriter = _configurationService.GetDefaultLogWriter();
 
             //CreateData();
             InitializeScreen();
@@ -87,7 +86,7 @@ namespace CFDatabaseExport
             };
 
             // Load output formats, default to display on screen
-            List<OutputFormat> outputFormats = Factory.GetOutputFormats(dataGridViews);
+            List<OutputFormat> outputFormats = _configurationService.GetOutputFormats(dataGridViews);
             cboOutputFormat.DisplayMember = "Display";
             cboOutputFormat.ValueMember = "Display";
             cboOutputFormat.DataSource = outputFormats;
@@ -96,7 +95,7 @@ namespace CFDatabaseExport
 
             // Load samples
             List<Query> queryList = _queryRespository.GetAll();
-            List<SampleOutputFormat> sampleOutputFormats = Factory.GetSampleOutputFormats(dataGridViews, _databaseInfoList, queryList);          
+            List<SampleOutputFormat> sampleOutputFormats = _configurationService.GetSampleOutputFormats(dataGridViews, _databaseInfoList, queryList);          
             tscbSample.ComboBox.DisplayMember = "DisplayName";
             tscbSample.ComboBox.ValueMember = "DisplayName";
             tscbSample.ComboBox.DataSource = sampleOutputFormats;
@@ -317,11 +316,11 @@ namespace CFDatabaseExport
                 QueryOptions queryOptions = GetQueryOptions();
 
                 // Get SQL generator
-                ISQLGenerator sqlGenerator = Factory.GetSQLGenerations().FirstOrDefault(sg => sg.GetType().Name.Contains(SelectedDatabaseInfo.SQLGenerator));
+                ISQLGenerator sqlGenerator = _configurationService.GetSQLGenerations().FirstOrDefault(sg => sg.GetType().Name.Contains(SelectedDatabaseInfo.SQLGenerator));
 
                 IQueryFunctionRepository queryFunctionRepository = new XmlQueryFunctionRepository(ApplicationObject.QueryFunctionFolder);
 
-                IQueryHandler queryHandler = Factory.GetQueryHandlers().Find(item => (item.Supports(queryOptions)));
+                IQueryHandler queryHandler = _configurationService.GetQueryHandlers().Find(item => (item.Supports(queryOptions)));
                 IQueryExecutor queryExecutor = new SQLQueryExecutor();                
                 if (queryHandler.VisibleOutput)
                 {
@@ -357,10 +356,10 @@ namespace CFDatabaseExport
             queryOptions.ConnectionString = sampleOutputFormat.DatabaseInfo.ConnectionString;
 
             // Get SQL generator
-            ISQLGenerator sqlGenerator = Factory.GetSQLGenerations().FirstOrDefault(sg => sg.GetType().Name.Contains(SelectedDatabaseInfo.SQLGenerator));
+            ISQLGenerator sqlGenerator = _configurationService.GetSQLGenerations().FirstOrDefault(sg => sg.GetType().Name.Contains(SelectedDatabaseInfo.SQLGenerator));
 
 
-            IQueryHandler queryHandler = Factory.GetQueryHandlers().Find(item => (item.Supports(queryOptions)));
+            IQueryHandler queryHandler = _configurationService.GetQueryHandlers().Find(item => (item.Supports(queryOptions)));
                 IQueryExecutor queryExecutor = new SQLQueryExecutor();
                 if (queryHandler.VisibleOutput)
                 {

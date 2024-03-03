@@ -64,7 +64,7 @@
       <DependentUpon>ListItemsUserControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Models\DatabaseType.cs" />
-    <Compile Include="Factory.cs" />
+    <Compile Include="Services\ConfigurationService.cs" />
     <Compile Include="IQueryExecutor.cs" />
     <Compile Include="Models\LocalNameValuePair.cs" />
     <Compile Include="OpenFileQueryExecutor.cs" />
@@ -144,7 +144,7 @@
     <Compile Include="Repository\Xml\XmlQueryFunctionRepository.cs" />
     <Compile Include="Repository\Xml\XmlQueryRespository1.cs" />
     <Compile Include="Models\SampleOutputFormat.cs" />
-    <Compile Include="Samples.cs" />
+    <Compile Include="Config\Samples.cs" />
     <Compile Include="Models\ScriptFunction.cs" />
     <Compile Include="Models\ScriptFunctionSelectItem.cs" />
     <Compile Include="Utilities\Database1Builder.cs" />
@@ -164,7 +164,7 @@
     <Compile Include="QueryOptions\QueryOptionsHTML.cs" />
     <Compile Include="QueryOptions\QueryOptionsSQL.cs" />
     <Compile Include="QueryOptions\QueryOptionsXML.cs" />
-    <Compile Include="QueryParser.cs" />
+    <Compile Include="Services\QueryParserService.cs" />
     <Compile Include="Forms\MainForm.cs">
       <SubType>Form</SubType>
     </Compile>

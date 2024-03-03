@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 using System.Data.SqlClient;
 using System.Windows.Forms;
 using System.Data;
+using CFDatabaseExport.Models;
 
-namespace CFDatabaseExport
+namespace CFDatabaseExport.QueryHandlers
 {
     /// <summary>
     /// Handles output of query to grid control

@@ -7,9 +7,10 @@ using System.Data.SqlClient;
 using System.Data;
 using System.IO;
 using System.Xml;
+using CFDatabaseExport.Models;
 using CFUtilities.XML;
 
-namespace CFDatabaseExport
+namespace CFDatabaseExport.QueryHandlers
 {
     /// <summary>
     /// Handles output of query to XML file

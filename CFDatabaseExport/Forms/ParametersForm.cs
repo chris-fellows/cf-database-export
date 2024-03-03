@@ -9,9 +9,10 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Reflection;
 using System.Data.OleDb;
+using CFDatabaseExport.Models;
 using CFUtilities.Databases;
 
-namespace CFDatabaseExport
+namespace CFDatabaseExport.Forms
 {
     public partial class ParametersForm : Form
     {

@@ -5,10 +5,15 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Data;
 using System.Data.OleDb;
+using CFDatabaseExport.Models;
+using CFDatabaseExport.QueryHandlers;
 using CFUtilities.Databases;
 
 namespace CFDatabaseExport
 {
+    /// <summary>
+    /// Executes query via SQL
+    /// </summary>
     internal class SQLQueryExecutor : IQueryExecutor
     {
         /// <summary>
@@ -21,15 +26,15 @@ namespace CFDatabaseExport
                     IQueryRepository queryRepository, IQueryFunctionRepository queryFunctionRepository,
                     CFUtilities.Databases.ISQLGenerator sqlGenerator, IProgress progress)
         {
-            SQLQuery query = (SQLQuery)queryObject;        
+            var query = (SQLQuery)queryObject;        
 
             // Open database
-            OleDbDatabase databaseConnection = new OleDbDatabase(queryOptions.ConnectionString);
+            var databaseConnection = new OleDbDatabase(queryOptions.ConnectionString);
             databaseConnection.Open();
 
             // Parse script functions            
-            QueryParser queryParser = new QueryParser();            
-            string querySql = queryParser.Parse(databaseConnection, query, queryRepository, queryFunctionRepository, sqlGenerator);
+            var queryParserService = new QueryParserService();            
+            string querySql = queryParserService.Parse(databaseConnection, query, queryRepository, queryFunctionRepository, sqlGenerator);
 
             OleDbDataReader reader = null;
             if (query.HasResultset)
@@ -38,7 +43,7 @@ namespace CFDatabaseExport
                 reader = databaseConnection.ExecuteReader(System.Data.CommandType.Text, querySql, CommandBehavior.Default, null);
 
                 // Get data tables, one per resultset
-                List<DataTable> dataTables = OleDbDatabase.GetDataTables(reader);
+                var dataTables = OleDbDatabase.GetDataTables(reader);
                 int rowCount = dataTables[0].Rows.Count;
 
                 // Handle result

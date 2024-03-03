@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CFDatabaseExport
+namespace CFDatabaseExport.Models
 {
     /// <summary>
     /// Script function to select one or more items from a list

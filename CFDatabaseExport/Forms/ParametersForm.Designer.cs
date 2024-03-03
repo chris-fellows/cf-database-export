@@ -1,4 +1,4 @@
-﻿namespace CFDatabaseExport
+﻿namespace CFDatabaseExport.Forms
 {
     partial class ParametersForm
     {

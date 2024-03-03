@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
+using CFDatabaseExport.Models;
 using CFUtilities.XML;
 
 namespace CFDatabaseExport

@@ -7,8 +7,9 @@ using System.Data;
 using System.IO;
 using System.Xml;
 using System.Xml.Xsl;
+using CFDatabaseExport.Models;
 
-namespace CFDatabaseExport
+namespace CFDatabaseExport.QueryHandlers
 {
     /// <summary>
     /// Handles output of query to file using XSL transform

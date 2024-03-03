@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 
-namespace CFDatabaseExport
+namespace CFDatabaseExport.Models
 {
     /// <summary>
     /// Query function that lets user select one or more items from a list

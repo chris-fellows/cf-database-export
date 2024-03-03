@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using CFDatabaseExport.Controls;
 
-namespace CFDatabaseExport
+namespace CFDatabaseExport.Models
 {
     /// <summary>
     /// Details for individual output format (CSV/HTML/Excel etc)
@@ -22,7 +22,7 @@ namespace CFDatabaseExport
         {
             Display = display;
             Comments = comments;
-            OptionsUserControl = optionsUserControl;          
+            OptionsUserControl = optionsUserControl;
             QueryOptions = queryOptions;
         }
 

@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 
-namespace CFDatabaseExport
+namespace CFDatabaseExport.Models
 {
     [XmlType("DatabaseInfo")]
     public class DatabaseInfo

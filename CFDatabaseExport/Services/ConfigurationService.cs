@@ -4,17 +4,22 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
+using CFDatabaseExport.Models;
+using CFDatabaseExport.QueryHandlers;
 using CFUtilities.Databases;
 
-namespace CFDatabaseExport
+namespace CFDatabaseExport.Services
 {
-    internal class Factory
+    /// <summary>
+    /// Configuration data service
+    /// </summary>
+    internal class ConfigurationService
     {
         /// <summary>
         /// Returns all SQL generators
         /// </summary>
         /// <returns></returns>
-        public static List<ISQLGenerator> GetSQLGenerations()
+        public List<ISQLGenerator> GetSQLGenerations()
         {
             List<ISQLGenerator> sqlGenerators = new List<ISQLGenerator>();
             sqlGenerators.Add(new MSSQLGenerator());
@@ -26,7 +31,7 @@ namespace CFDatabaseExport
         /// </summary>
         /// <param name="dataGridViews"></param>
         /// <returns></returns>
-        public static List<OutputFormat> GetOutputFormats(List<System.Windows.Forms.DataGridView> dataGridViews)
+        public  List<OutputFormat> GetOutputFormats(List<System.Windows.Forms.DataGridView> dataGridViews)
         {          
             List<OutputFormat> outputFormats = new List<OutputFormat>();
             QueryOptions queryOptions = null;        
@@ -65,7 +70,7 @@ namespace CFDatabaseExport
         /// <param name="databaseInfoList"></param>
         /// <param name="queryList"></param>
         /// <returns></returns>
-        public static List<SampleOutputFormat> GetSampleOutputFormats(List<System.Windows.Forms.DataGridView> dataGridViews,
+        public List<SampleOutputFormat> GetSampleOutputFormats(List<System.Windows.Forms.DataGridView> dataGridViews,
                                         List<DatabaseInfo> databaseInfoList,
                                         List<Query> queryList)
         {
@@ -116,7 +121,7 @@ namespace CFDatabaseExport
         /// Returns query handles
         /// </summary>
         /// <returns></returns>
-        public static List<IQueryHandler> GetQueryHandlers()
+        public List<IQueryHandler> GetQueryHandlers()
         {
             List<IQueryHandler> queryHandlers = new List<IQueryHandler>();
             queryHandlers.Add(new QueryHandlerCSV());
@@ -134,7 +139,7 @@ namespace CFDatabaseExport
         /// Returns default query repository
         /// </summary>
         /// <returns></returns>
-        public static IQueryRepository GetDefaultQueryRepository()
+        public IQueryRepository GetDefaultQueryRepository()
         {
             return new XmlQueryRespository(ApplicationObject.QueryFolder);
         }
@@ -143,7 +148,7 @@ namespace CFDatabaseExport
         /// Returns default log writer
         /// </summary>
         /// <returns></returns>
-        public static CFUtilities.Logging.ILogWriter GetDefaultLogWriter()
+        public CFUtilities.Logging.ILogWriter GetDefaultLogWriter()
         {
             return new CFUtilities.Logging.ConsoleLog();
             //return new CFUtilities.Logging.TextLog("", (Char)9);

@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using CFUtilities.ValueConverters;
 
-namespace CFDatabaseExport
+namespace CFDatabaseExport.Models
 {
     public class ColumnFormat
     {

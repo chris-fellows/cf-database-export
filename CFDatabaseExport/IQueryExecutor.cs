@@ -1,13 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using CFDatabaseExport.Models;
+using CFDatabaseExport.QueryHandlers;
 
 namespace CFDatabaseExport
 {
     /// <summary>
-    /// Interface for executing a query
+    /// Interface for executing a query and creating the output
     /// </summary>
     internal interface IQueryExecutor
     {
