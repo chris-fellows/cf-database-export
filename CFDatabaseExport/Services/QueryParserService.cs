@@ -10,14 +10,16 @@ using CFUtilities.Databases;
 namespace CFDatabaseExport
 {
     /// <summary>
-    /// Parses the query, replaces any functions
+    /// Parses the query, prompts used for parameters, replaces any functions in the query script and assigns the
+    /// parameter value to SQL variables. E.g. User is prompted to select a list of countries and the @COUNTRY_IDs
+    /// table variable is populated with Country IDs
     /// </summary>
     internal class QueryParserService
     {
         private const string _functionPrefix = "##";
 
         public string Parse(OleDbDatabase database, SQLQuery query, 
-                            IQueryRepository queryRepository, IQueryFunctionRepository queryFunctionRepository,
+                            IQueryService queryRepository, IQueryFunctionService queryFunctionRepository,
                             ISQLGenerator sqlGenerator)
         {
             string querySql = query.SQL;

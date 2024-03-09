@@ -9,11 +9,11 @@ using CFUtilities.XML;
 
 namespace CFDatabaseExport
 {
-    public class XmlDatabaseInfoRepository : IDatabaseInfoRepository
+    public class XmlDatabaseInfoService : IDatabaseInfoService
     {
         private string _folder;
 
-        public XmlDatabaseInfoRepository(string folder)
+        public XmlDatabaseInfoService(string folder)
         {
             _folder = folder;
         }

@@ -4,15 +4,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CFDatabaseExport
+namespace CFDatabaseExport.Models
 {
     /// <summary>
-    /// Query options for output to grid
+    /// Query options for output to CSV
     /// </summary>
-    public class QueryOptionsGrid : QueryOptions
+    public class QueryOptionsCSV : QueryOptions
     {
         public string DateFormat { get; set; }
         public string NullString { get; set; }
-        public List<System.Windows.Forms.DataGridView> Grids = new List<System.Windows.Forms.DataGridView>();
+        public string FileName { get; set; }
+        public Char Delimiter { get; set; }      
     }
 }

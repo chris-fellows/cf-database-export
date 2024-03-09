@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CFDatabaseExport
+namespace CFDatabaseExport.Models
 {
-    public class QueryOptionsXLS : QueryOptions
+    public class QueryOptionsXML : QueryOptions
     {
         public string FileName { get; set; }
     }

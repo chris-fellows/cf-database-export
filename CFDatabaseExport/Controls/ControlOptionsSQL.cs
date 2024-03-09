@@ -7,15 +7,22 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using CFDatabaseExport.Models;
+using CFDatabaseExport.Utilities;
 
 namespace CFDatabaseExport.Controls
 {
+    /// <summary>
+    /// Control for exporting data to SQL
+    /// </summary>
     public partial class ControlOptionsSQL : UserControl, IControlOptions
     {
         public QueryOptionsSQL QueryOptions { get; set; }
 
+        private readonly string _dateFormat;
+
         public ControlOptionsSQL()
-        {
+        {           
             InitializeComponent();
 
             /*
@@ -66,7 +73,7 @@ namespace CFDatabaseExport.Controls
         {
             QueryOptions.TemplateSQLFile = txtTemplateSQLFile.Text;
             QueryOptions.RowTemplateSQL = txtRowTemplateSQL.Text;
-            QueryOptions.DateFormat = ApplicationObject.DateTimeFormat1;
+            QueryOptions.DateFormat = this.QueryOptions.DateFormat;
             QueryOptions.NullString = "NULL";
             QueryOptions.FileName = txtOutputFile.Text;        
         }

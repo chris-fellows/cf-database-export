@@ -23,7 +23,7 @@ namespace CFDatabaseExport
         /// <param name="queryOptions"></param>
         /// <param name="queryHandler"></param>
         public void ExecuteQuery(Query queryObject, QueryOptions queryOptions, IQueryHandler queryHandler, 
-                    IQueryRepository queryRepository, IQueryFunctionRepository queryFunctionRepository,
+                    IQueryService queryRepository, IQueryFunctionService queryFunctionRepository,
                     CFUtilities.Databases.ISQLGenerator sqlGenerator, IProgress progress)
         {
             var query = (SQLQuery)queryObject;        
@@ -44,7 +44,7 @@ namespace CFDatabaseExport
 
                 // Get data tables, one per resultset
                 var dataTables = OleDbDatabase.GetDataTables(reader);
-                int rowCount = dataTables[0].Rows.Count;
+                //int rowCount = dataTables[0].Rows.Count;
 
                 // Handle result
                 queryHandler.Handle(query, queryOptions, dataTables, progress);

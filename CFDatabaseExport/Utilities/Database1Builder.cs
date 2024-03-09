@@ -8,7 +8,7 @@ using System.IO;
 using CFUtilities;
 using CFUtilities.CSV;
 
-namespace CFDatabaseExport
+namespace CFDatabaseExport.Utilities
 {
     class Database1Builder
     {

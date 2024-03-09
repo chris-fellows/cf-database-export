@@ -5,9 +5,12 @@ using System.Text;
 using System.Threading.Tasks;
 using CFDatabaseExport.Models;
 
-namespace CFDatabaseExport
+namespace CFDatabaseExport.Utilities
 {
-    internal class Samples
+    /// <summary>
+    /// Utilities for creating sample queries
+    /// </summary>
+    internal class SampleUtilities
     {
         public static void CreateQueries()
         {
@@ -16,7 +19,7 @@ namespace CFDatabaseExport
 
             Guid ordersDatabaseId = Guid.NewGuid();
 
-            IQueryRepository queryRepository = new XmlQueryRespository(newQueryFolder);
+            IQueryService queryRepository = new XmlQueryService(newQueryFolder);
 
             foreach(string queryFile in System.IO.Directory.GetFiles(oldQueryFolder, "*.sql"))
             {
@@ -32,9 +35,9 @@ namespace CFDatabaseExport
             }
         }
 
-        public static void CreateQueryFunctions()
+        public static void CreateQueryFunctions(ApplicationObject applicationObject)
         {
-            IQueryFunctionRepository queryFunctionRepository = new XmlQueryFunctionRepository(ApplicationObject.QueryFunctionFolder);
+            IQueryFunctionService queryFunctionRepository = new XmlQueryFunctionService(applicationObject.QueryFunctionFolder);
 
             QueryFunctionListItem queryFunction1 = new QueryFunctionListItem()
             {

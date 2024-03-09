@@ -13,9 +13,24 @@ namespace CFDatabaseExport.Models
     /// </summary>
     public class OutputFormat
     {
+        /// <summary>
+        /// Display name
+        /// </summary>
         public string Display { get; set; }
+
+        /// <summary>
+        /// Comments for output format. E.g. Additional instructions.
+        /// </summary>
         public string Comments { get; set; }
+
+        /// <summary>
+        /// Control for changing options
+        /// </summary>
         public UserControl OptionsUserControl { get; set; }
+
+        /// <summary>
+        /// Model containing query options
+        /// </summary>
         public QueryOptions QueryOptions { get; set; }
 
         public OutputFormat(string display, string comments, UserControl optionsUserControl, QueryOptions queryOptions)

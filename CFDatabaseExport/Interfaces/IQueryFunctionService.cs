@@ -4,7 +4,7 @@ using CFDatabaseExport.Models;
 
 namespace CFDatabaseExport
 {
-    public interface IQueryFunctionRepository
+    public interface IQueryFunctionService
     {
         List<QueryFunction> GetAll();
         void Add(List<QueryFunction> queryFunctions);

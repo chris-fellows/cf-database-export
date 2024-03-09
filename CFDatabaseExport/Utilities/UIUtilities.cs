@@ -5,8 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace CFDatabaseExport
+namespace CFDatabaseExport.Utilities
 {
+    /// <summary>
+    /// UI utilities
+    /// </summary>
     internal class UIUtilities
     {
         public static string SelectFile(string title, string selectedFile, string filter, bool checkFileExists, bool checkPathExists)

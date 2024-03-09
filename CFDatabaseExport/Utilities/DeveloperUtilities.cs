@@ -9,7 +9,7 @@ using CFDatabaseExport.Models;
 using CFUtilities.XML;
 using CFUtilities.CSV;
 
-namespace CFDatabaseExport
+namespace CFDatabaseExport.Utilities
 {
     internal class DeveloperUtilities
     {

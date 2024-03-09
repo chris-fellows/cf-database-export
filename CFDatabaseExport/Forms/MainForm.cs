@@ -5,7 +5,7 @@ using System.Linq;
 using System.Windows.Forms;
 using CFDatabaseExport.Models;
 using CFDatabaseExport.QueryHandlers;
-using CFDatabaseExport.Services;
+//using CFDatabaseExport.Services;
 using CFUtilities;
 using CFUtilities.XML;
 using CFUtilities.Logging;
@@ -13,25 +13,49 @@ using CFUtilities.Databases;
 
 namespace CFDatabaseExport.Forms
 {
+    /// <summary>
+    /// Main form. Lists all databases, displays queries for selected database, allows users to select query,
+    /// select output format and export.
+    /// </summary>
     public partial class MainForm : Form, IProgress
     {
-        private IQueryRepository _queryRespository = null;
-        private ConfigurationService _configurationService = new ConfigurationService();
-        private ILogWriter _logWriter = null;
+        private readonly ApplicationObject _applicationObject;        
+        private readonly IDatabaseInfoService _databaseInfoService;
+        private readonly IDatabaseTypeService _databaseTypeService;
+        private readonly IQueryFunctionService _queryFunctionService = null;
+        private readonly IQueryService _queryRespository = null;        
+        private readonly ILogWriter _logWriter = null;
+        private readonly IEnumerable<IQueryHandler> _queryHandlers;
         private List<DatabaseInfo> _databaseInfoList = new List<DatabaseInfo>();
+        private readonly IEnumerable<ISQLGenerator> _sqlGenerators = null;
 
-        public MainForm()
-        {
+        public MainForm(ApplicationObject applicationObject,
+                    IDatabaseInfoService databaseInfoService,
+                    IDatabaseTypeService databaseTypeService,
+                    ILogWriter logWriter,
+                    IQueryFunctionService queryFunctionService,                                        
+                    IEnumerable<IQueryHandler> queryHandlers, 
+                    IQueryService queryService,
+                    IEnumerable<ISQLGenerator> sqlGenerators) 
+        {                        
             InitializeComponent();
 
-            Samples.CreateQueryFunctions();
+            //SampleUtilities.CreateQueryFunctions(applicationObject);
 
             //DeveloperUtilities.CreateDatabaseInfos(@"C:\Data\Development\C#\CFDatabaseExport\Data\Database Info");
             //Database1Builder.CreateDatabase1(@"C:\Data\Development\C#\CFDatabaseExport\bin\Debug\Data\Databases\Order Database");
             //DeveloperUtilities.CreateFunctions(@"C:\Data\Database Utilities\Function");
 
-            _queryRespository = _configurationService.GetDefaultQueryRepository();
-            _logWriter = _configurationService.GetDefaultLogWriter();
+            //_queryRespository = _configurationService.GetDefaultQueryRepository();
+            //_logWriter = _configurationService.GetDefaultLogWriter();            
+            _applicationObject = applicationObject;            
+            _databaseInfoService = databaseInfoService;
+            _databaseTypeService = databaseTypeService;
+            _logWriter = logWriter;
+            _queryFunctionService = queryFunctionService;
+            _queryHandlers = queryHandlers;           
+            _queryRespository = queryService;
+            _sqlGenerators = sqlGenerators;
 
             //CreateData();
             InitializeScreen();
@@ -45,33 +69,33 @@ namespace CFDatabaseExport.Forms
             
         }
 
-        private void CreateData()
-        {                       
-            ItemList<DatabaseInfo> databaseInfoList = new ItemList<DatabaseInfo>();
+        //private void CreateData()
+        //{                       
+        //    ItemList<DatabaseInfo> databaseInfoList = new ItemList<DatabaseInfo>();
 
-            DatabaseInfo databaseInfo1 = new DatabaseInfo()
-            {
-                DisplayName = "Local",
-                ConnectionString = @"Server=MYMACHINE\SQLEXPRESS;Database=XXX;Trusted_Connection=True;"
-            };
-            databaseInfoList.Items.Add(databaseInfo1);
-            //XmlSerializationUtilities.SerializeToFile<DatabaseInfo>(databaseInfo1, ApplicationObject.DatabaseFolder + @"\Database Info.Local.xml");
+        //    DatabaseInfo databaseInfo1 = new DatabaseInfo()
+        //    {
+        //        DisplayName = "Local",
+        //        ConnectionString = @"Server=MYMACHINE\SQLEXPRESS;Database=XXX;Trusted_Connection=True;"
+        //    };
+        //    databaseInfoList.Items.Add(databaseInfo1);
+        //    //XmlSerializationUtilities.SerializeToFile<DatabaseInfo>(databaseInfo1, ApplicationObject.DatabaseFolder + @"\Database Info.Local.xml");
 
-            DatabaseInfo databaseInfo2 = new DatabaseInfo()
-            {
-                DisplayName = "Local",
-                ConnectionString = "Server=172.28.124.51;Database=XXX;User Id=sa; Password=XXX;"
-            };
-            databaseInfoList.Items.Add(databaseInfo2);
-            //XmlSerializationUtilities.SerializeToFile<DatabaseInfo>(databaseInfo2, ApplicationObject.DatabaseFolder + @"\Database Info.Production.xml");
+        //    DatabaseInfo databaseInfo2 = new DatabaseInfo()
+        //    {
+        //        DisplayName = "Local",
+        //        ConnectionString = "Server=172.28.124.51;Database=XXX;User Id=sa; Password=XXX;"
+        //    };
+        //    databaseInfoList.Items.Add(databaseInfo2);
+        //    //XmlSerializationUtilities.SerializeToFile<DatabaseInfo>(databaseInfo2, ApplicationObject.DatabaseFolder + @"\Database Info.Production.xml");
 
-            XmlSerialization.SerializeToFile<ItemList<DatabaseInfo>>(databaseInfoList, ApplicationObject.DatabaseInfoFolder + @"\Database Info.xml");
-        }
+        //    XmlSerialization.SerializeToFile<ItemList<DatabaseInfo>>(databaseInfoList, System.IO.Path.Combine(_applicationObject.DatabaseInfoFolder, "Database Info.xml"));
+        //}
 
         private void InitializeScreen()
         {
-            IDatabaseInfoRepository databaseInfoRepository = new XmlDatabaseInfoRepository(ApplicationObject.DatabaseInfoFolder);
-            _databaseInfoList = databaseInfoRepository.GetAll();
+            //IDatabaseInfoRepository databaseInfoRepository = new XmlDatabaseInfoRepository(ApplicationObject.DatabaseInfoFolder);
+            _databaseInfoList = _databaseInfoService.GetAll();
             tscbDatabase.Items.Clear();            
             foreach(DatabaseInfo databaseInfo in _databaseInfoList)
             {                
@@ -86,7 +110,7 @@ namespace CFDatabaseExport.Forms
             };
 
             // Load output formats, default to display on screen
-            List<OutputFormat> outputFormats = _configurationService.GetOutputFormats(dataGridViews);
+            List<OutputFormat> outputFormats = _applicationObject.GetOutputFormats(dataGridViews);
             cboOutputFormat.DisplayMember = "Display";
             cboOutputFormat.ValueMember = "Display";
             cboOutputFormat.DataSource = outputFormats;
@@ -95,7 +119,7 @@ namespace CFDatabaseExport.Forms
 
             // Load samples
             List<Query> queryList = _queryRespository.GetAll();
-            List<SampleOutputFormat> sampleOutputFormats = _configurationService.GetSampleOutputFormats(dataGridViews, _databaseInfoList, queryList);          
+            List<SampleOutputFormat> sampleOutputFormats = _applicationObject.GetSampleOutputFormats(_databaseInfoList, queryList);          
             tscbSample.ComboBox.DisplayMember = "DisplayName";
             tscbSample.ComboBox.ValueMember = "DisplayName";
             tscbSample.ComboBox.DataSource = sampleOutputFormats;
@@ -306,7 +330,7 @@ namespace CFDatabaseExport.Forms
         private void RunQuery()
         {                
             SQLQuery query = SelectedSqlQuery;
-            IQueryRepository queryRepository = _queryRespository;           
+            //IQueryRepository queryRepository = _queryRespository;           
 
             OutputFormat outputFormat = (OutputFormat)cboOutputFormat.SelectedItem;
             if (outputFormat.CanApplyUserControlOptionsToModel())
@@ -316,22 +340,20 @@ namespace CFDatabaseExport.Forms
                 QueryOptions queryOptions = GetQueryOptions();
 
                 // Get SQL generator
-                ISQLGenerator sqlGenerator = _configurationService.GetSQLGenerations().FirstOrDefault(sg => sg.GetType().Name.Contains(SelectedDatabaseInfo.SQLGenerator));
-
-                IQueryFunctionRepository queryFunctionRepository = new XmlQueryFunctionRepository(ApplicationObject.QueryFunctionFolder);
-
-                IQueryHandler queryHandler = _configurationService.GetQueryHandlers().Find(item => (item.Supports(queryOptions)));
-                IQueryExecutor queryExecutor = new SQLQueryExecutor();                
+                var sqlGenerator = _sqlGenerators.FirstOrDefault(sg => sg.GetType().Name.Contains(SelectedDatabaseInfo.SQLGenerator));
+            
+                var queryHandler = _queryHandlers.ToList().Find(item => (item.Supports(queryOptions)));
+                var queryExecutor = new SQLQueryExecutor();                
                 if (queryHandler.VisibleOutput)
                 {
                     tabControl1.SelectedTab = tabPage2; // Select Results
                 }
-                queryExecutor.ExecuteQuery(query, queryOptions, queryHandler, queryRepository, queryFunctionRepository, sqlGenerator, this);
+                queryExecutor.ExecuteQuery(query, queryOptions, queryHandler, _queryRespository, _queryFunctionService, sqlGenerator, this);
 
                 // Open output folder, not necessary for grid output
                 if (outputFormat.QueryOptions as QueryOptionsGrid == null)
                 {
-                    IOUtilities.OpenDirectoryWithExplorer(ApplicationObject.OutputFolder);
+                    IOUtilities.OpenDirectoryWithExplorer(_applicationObject.OutputFolder);
                 }
 
                 DisplayStatus("Ready");
@@ -343,10 +365,13 @@ namespace CFDatabaseExport.Forms
             }
         }
 
+        /// <summary>
+        /// Runs sample query for demo
+        /// </summary>
         private void RunSampleQuery()
         {
             //SQLQuery query = SelectedSqlQuery;
-            IQueryRepository queryRepository = _queryRespository;
+            IQueryService queryRepository = _queryRespository;
 
             SampleOutputFormat sampleOutputFormat = (SampleOutputFormat)tscbSample.ComboBox.SelectedItem;
             //OutputFormat outputFormat = (OutputFormat)cboOutputFormat.SelectedItem;
@@ -356,10 +381,9 @@ namespace CFDatabaseExport.Forms
             queryOptions.ConnectionString = sampleOutputFormat.DatabaseInfo.ConnectionString;
 
             // Get SQL generator
-            ISQLGenerator sqlGenerator = _configurationService.GetSQLGenerations().FirstOrDefault(sg => sg.GetType().Name.Contains(SelectedDatabaseInfo.SQLGenerator));
+            var sqlGenerator = _sqlGenerators.FirstOrDefault(sg => sg.GetType().Name.Contains(SelectedDatabaseInfo.SQLGenerator));
 
-
-            IQueryHandler queryHandler = _configurationService.GetQueryHandlers().Find(item => (item.Supports(queryOptions)));
+            var queryHandler = _queryHandlers.ToList().Find(item => (item.Supports(queryOptions)));
                 IQueryExecutor queryExecutor = new SQLQueryExecutor();
                 if (queryHandler.VisibleOutput)
                 {
@@ -368,7 +392,7 @@ namespace CFDatabaseExport.Forms
                 queryExecutor.ExecuteQuery(sampleOutputFormat.SQLQuery, queryOptions, queryHandler, queryRepository, null, sqlGenerator, this);
 
                 // Open output folder
-                IOUtilities.OpenDirectoryWithExplorer(ApplicationObject.OutputFolder);
+                IOUtilities.OpenDirectoryWithExplorer(_applicationObject.OutputFolder);
 
                 MessageBox.Show("Query run", "Run");
             //}

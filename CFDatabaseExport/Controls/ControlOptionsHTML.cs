@@ -7,9 +7,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using CFDatabaseExport.Models;
+using CFDatabaseExport.Utilities;
 
 namespace CFDatabaseExport.Controls
 {
+    /// <summary>
+    /// Control for exporting data to HTML
+    /// </summary>
     public partial class ControlOptionsHTML : UserControl, IControlOptions
     {
         public QueryOptionsHTML QueryOptions { get; set; }

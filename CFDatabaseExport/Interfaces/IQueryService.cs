@@ -7,7 +7,7 @@ namespace CFDatabaseExport
     /// <summary>
     /// Interface for queries
     /// </summary>
-    public interface IQueryRepository
+    public interface IQueryService
     {   
         Query GetByID(Guid id);
         List<Query> GetAll();

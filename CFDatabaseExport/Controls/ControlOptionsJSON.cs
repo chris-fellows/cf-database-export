@@ -7,20 +7,25 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using CFDatabaseExport.Models;
+using CFDatabaseExport.Utilities;
 using CFUtilities;
 
 namespace CFDatabaseExport.Controls
 {
-    public partial class ControlOptionsCSV : UserControl, IControlOptions
+    /// <summary>
+    /// Control for exporting data to JSON
+    /// </summary>
+    public partial class ControlOptionsJSON : UserControl, IControlOptions
     {
-        public QueryOptionsCSV QueryOptions { get; set; }
+        public QueryOptionsJSON QueryOptions { get; set; }
 
-        public ControlOptionsCSV()
+        public ControlOptionsJSON()
         {
             InitializeComponent();
         }
 
-        public ControlOptionsCSV(QueryOptionsCSV queryOptions)
+        public ControlOptionsJSON(QueryOptionsJSON queryOptions)
         {
             InitializeComponent();
 
@@ -37,11 +42,6 @@ namespace CFDatabaseExport.Controls
             delimeters.Add(new NameValuePair<Char>("Pipe (|)", '|'));
             delimeters.Add(new NameValuePair<Char>("Hash (#)", '#'));
             delimeters.Add(new NameValuePair<Char>("Zero", (Char)0));
-
-            cboDelimiter.DisplayMember = "Name";
-            cboDelimiter.ValueMember = "Value";
-            cboDelimiter.DataSource = delimeters;
-            cboDelimiter.SelectedValue = queryOptions.Delimiter;
         }
 
         public bool CanApplyToModel()
@@ -53,13 +53,12 @@ namespace CFDatabaseExport.Controls
         {
             QueryOptions.FileName = txtOutputFile.Text;
             QueryOptions.DateFormat = txtDateFormat.Text;
-            QueryOptions.NullString = txtNull.Text;
-            QueryOptions.Delimiter = (Char)cboDelimiter.SelectedValue;
+            QueryOptions.NullString = txtNull.Text;            
         }
 
         private void btnSelectOutputFile_Click(object sender, EventArgs e)
         {
-            txtOutputFile.Text = UIUtilities.SelectFile("Output file", txtOutputFile.Text, "Delimited files|*.csv;*.txt", false, false);
+            txtOutputFile.Text = UIUtilities.SelectFile("Output file", txtOutputFile.Text, "JSON files|*.json", false, false);
         }
 
         private void txtOutputFile_TextChanged(object sender, EventArgs e)
@@ -71,25 +70,5 @@ namespace CFDatabaseExport.Controls
         {
 
         }
-
-        //public string DateFormat
-        //{
-        //    get { return txtDateFormat.Text; }
-        //}
-
-        //public string NullString
-        //{
-        //    get { return txtNull.Text; }
-        //}
-
-        //public bool HeadersQuoted
-        //{
-        //    get { return chkHeadersQuoted.Checked; }
-        //}
-
-        //public bool ValuesQuoted
-        //{
-        //    get { return chkValuesQuoted.Checked; }
-        //}
     }
 }

@@ -12,11 +12,11 @@ namespace CFDatabaseExport
     /// <summary>
     /// Repository for queries stored in file system
     /// </summary>
-    public class XmlQueryRespository : IQueryRepository
+    public class XmlQueryService : IQueryService
     {
         private string _folder;
         
-        public XmlQueryRespository(string folder)
+        public XmlQueryService(string folder)
         {
             _folder = folder;
         }

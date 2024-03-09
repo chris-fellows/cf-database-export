@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using CFDatabaseExport.Models;
 
-namespace CFDatabaseExport
+namespace CFDatabaseExport.Models
 {
     abstract public class QueryOptions
     {

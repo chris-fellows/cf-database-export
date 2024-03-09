@@ -9,11 +9,11 @@ using CFUtilities.XML;
 
 namespace CFDatabaseExport
 {
-    public class XmlQueryFunctionRepository : IQueryFunctionRepository
+    public class XmlQueryFunctionService : IQueryFunctionService
     {
         private string _folder;
 
-        public XmlQueryFunctionRepository(string folder)
+        public XmlQueryFunctionService(string folder)
         {
             _folder = folder;
         }

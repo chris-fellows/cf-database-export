@@ -4,7 +4,7 @@ using CFDatabaseExport.Models;
 
 namespace CFDatabaseExport
 {
-    public interface IDatabaseTypeRepository
+    public interface IDatabaseTypeService
     {
         List<DatabaseType> GetAll();
     }

@@ -7,9 +7,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using CFDatabaseExport.Models;
 
 namespace CFDatabaseExport.Controls
-{
+{/// <summary>
+ /// Control for exporting data to grid
+ /// </summary>
     public partial class ControlOptionsGrid : UserControl, IControlOptions
     {
         public QueryOptionsGrid QueryOptions { get; set; }
