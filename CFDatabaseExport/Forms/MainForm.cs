@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using CFDatabaseExport.Models;
@@ -12,6 +13,9 @@ using CFUtilities.Logging;
 using CFUtilities.Databases;
 using CFDatabaseExport.Exceptions;
 using System.Threading;
+using CFDatabaseExport.Utilities;
+using System.Security.Cryptography;
+using CFDatabaseExport.Interfaces;
 
 namespace CFDatabaseExport.Forms
 {
@@ -42,6 +46,9 @@ namespace CFDatabaseExport.Forms
                     IEnumerable<ISQLGenerator> sqlGenerators) 
         {                        
             InitializeComponent();
+
+            //CreateOrderDatabase("D:\\Data\\Temp\\CFDatabaseExportData\\Data",
+            //                  "D:\\Data\\Dev\\C#\\cf-database-export\\CFDatabaseExport\\Data\\Queries");
 
             //SampleUtilities.CreateQueryFunctions(applicationObject);
 
@@ -472,9 +479,9 @@ namespace CFDatabaseExport.Forms
             if (queryHandler.VisibleOutput)
             {
                 tabControl1.SelectedTab = tabPage2; // Select Results
-            }
-            queryExecutor.ExecuteQuery(sampleOutputFormat.SQLQuery, queryOptions, queryHandler, queryRepository, 
-                            null, sqlGenerator, this, tokenSource.Token);
+            }            
+            queryExecutor.ExecuteQuery(sampleOutputFormat.SQLQuery, queryOptions, queryHandler, queryRepository,
+                            _queryFunctionService, sqlGenerator, this, tokenSource.Token);
 
             // Open output folder
             IOUtilities.OpenDirectoryWithExplorer(_applicationObject.OutputFolder);
@@ -505,6 +512,48 @@ namespace CFDatabaseExport.Forms
             {
                 DisplayStatus("Ready");
             }            
+        }
+
+        private void createOrderDemoDatabaseToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (MessageBox.Show("Create Order database?", "Create Database", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            {
+                CreateOrderDatabaseAndConfig("D:\\Data\\Temp\\CFDatabaseExportData",
+                                "D:\\Data\\Dev\\C#\\cf-database-export\\CFDatabaseExport\\Data\\Queries");
+
+                int xxx = 1000;
+            }
+        }
+
+        /// <summary>
+        /// Creates the Order database and config for demo
+        /// </summary>
+        /// <param name="rootFolder"></param>
+        /// <param name="oldQueryFolder"></param>
+        private void CreateOrderDatabaseAndConfig(string rootFolder, string oldQueryFolder)
+        {            
+            var newQueryFolder = Path.Combine(rootFolder, "Queries", "Order Database");
+            var databaseFolder = Path.Combine(rootFolder, "Databases", "Order Database");
+
+            Directory.CreateDirectory(rootFolder);
+
+            // Create the database
+            IDatabaseCreator ordersCreator = new Demo.Order.OrderCreator(databaseFolder);
+            ordersCreator.Create();
+
+            var databaseInfoService = new XmlDatabaseInfoService(Path.Combine(rootFolder, "Database Info"));
+            var databaseTypeService = new XmlDatabaseTypeService(Path.Combine(rootFolder, "Database Type"));
+            var queryFunctionService = new XmlQueryFunctionService(Path.Combine(rootFolder, "Query Functions"));
+            var queryService = new XmlQueryService(Path.Combine(rootFolder, "Queries"));
+
+            // Create the config data & queries
+            IDatabaseUtilities ordersUtilities = new Demo.Order.OrderUtilities();
+            ordersUtilities.CreateDatabaseType(databaseTypeService);
+            ordersUtilities.CreateDatabaseInfo(databaseInfoService, databaseTypeService, databaseFolder);
+            ordersUtilities.CreateQueries(databaseInfoService, newQueryFolder, oldQueryFolder, queryService);
+            ordersUtilities.CreateQueryFunctions(queryFunctionService);
+
+            int xxx = 1000;
         }
     }
 }

@@ -153,8 +153,8 @@ namespace CFDatabaseExport
             QueryOptions queryOptions = null;
             OutputFormat outputFormat = null;
 
-            DatabaseInfo databaseInfo = databaseInfoList.Find(item => (item.DisplayName.Equals(SampleUtilities.SampleDatabaseDisplay)));
-            string queryFile = SampleUtilities.SampleXSLQueryFileName;
+            DatabaseInfo databaseInfo = databaseInfoList.Find(item => (item.DisplayName.Equals(Demo.Order.OrderUtilities.SampleDatabaseDisplay)));
+            string queryFile = Demo.Order.OrderUtilities.SampleXSLQueryFileName;
             SQLQuery sqlQuery = (SQLQuery)queryList.FirstOrDefault(q => q.GetType() == typeof(SQLQuery));
 
             queryOptions = new QueryOptionsCSV() { Delimiter = ',', DateFormat = this.DateTimeFormat1, NullString = "null", FileName = Path.Combine(this.OutputFolder, "Results.csv") };
@@ -165,7 +165,7 @@ namespace CFDatabaseExport
             outputFormat = new OutputFormat("Excel file (*.xlsx)", "Exports query results to XSLX file", new CFDatabaseExport.Controls.ControlOptionsXLS((QueryOptionsXLS)queryOptions), queryOptions);
             outputFormats.Add(new SampleOutputFormat("Excel file", databaseInfo, sqlQuery, outputFormat));
 
-            queryOptions = new QueryOptionsXSLT() { FileName = Path.Combine(this.OutputFolder, "Results.htm"), TransformFile = SampleUtilities.SampleXSLTransformFile };
+            queryOptions = new QueryOptionsXSLT() { FileName = Path.Combine(this.OutputFolder, "Results.htm"), TransformFile = Demo.Order.OrderUtilities.SampleXSLTransformFile };
             outputFormat = new OutputFormat("File from XSL transform", "Creates a new file (For example, An HTML file) by applying an XSL transform to the query results", new CFDatabaseExport.Controls.ControlOptionsXSLT((QueryOptionsXSLT)queryOptions), queryOptions);
             outputFormats.Add(new SampleOutputFormat("XSL transform", databaseInfo, sqlQuery, outputFormat));
 

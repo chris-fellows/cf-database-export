@@ -8,9 +8,15 @@ namespace CFDatabaseExport
     /// Interface for queries
     /// </summary>
     public interface IQueryService
-    {   
+    {
         Query GetByID(Guid id);
+
         List<Query> GetAll();
-        void Add(List<Query> queries);
+
+        void Delete(Guid id);
+
+        void Add(Query query);
+
+        void Update(Query query);
     }
 }

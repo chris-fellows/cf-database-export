@@ -7,12 +7,23 @@ using System.Data;
 using System.IO;
 using CFUtilities;
 using CFUtilities.CSV;
+using CFDatabaseExport.Interfaces;
 
-namespace CFDatabaseExport.Utilities
+namespace CFDatabaseExport.Demo.Order
 {
-    class Database1Builder
+    /// <summary>
+    /// Builds an Orders database (Delimited files) for demo purposes
+    /// </summary>
+    internal class OrderCreator : IDatabaseCreator
     {
-        public static void CreateDatabase1(string outputFolder)
+        private string _outputFolder;
+
+        public OrderCreator(string outputFolder)
+        {
+            _outputFolder = outputFolder;
+        }
+
+        public void Create()
         {
             Char delimiter = ',';
             CSVSettings settings = null;
@@ -24,23 +35,23 @@ namespace CFDatabaseExport.Utilities
             DataTable orderData = GetOrderData(customerData);
             DataTable orderItemData = GetOrderItemData(orderData, productData);
 
-            settings = new CSVSettings(Path.Combine(outputFolder, "Countries.txt"), delimiter, false, false);
+            settings = new CSVSettings(Path.Combine(_outputFolder, "Countries.txt"), delimiter, false, false);
             //settings.SetColumnValueQuoted(countriesData);
             CSVFile.WriteDataTable(settings, countriesData, true);
 
-            settings = new CSVSettings(Path.Combine(outputFolder, "Products.txt"), delimiter, false, false);
+            settings = new CSVSettings(Path.Combine(_outputFolder, "Products.txt"), delimiter, false, false);
             //settings.SetColumnValueQuoted(productData);            
             CSVFile.WriteDataTable(settings, productData, true);
 
-            settings = new CSVSettings(Path.Combine(outputFolder, "Customers.txt"), delimiter, false, false);
+            settings = new CSVSettings(Path.Combine(_outputFolder, "Customers.txt"), delimiter, false, false);
             //settings.SetColumnValueQuoted(customerData);
             CSVFile.WriteDataTable(settings, customerData, true);
 
-            settings = new CSVSettings(Path.Combine(outputFolder, "Orders.txt"), delimiter, false, false);
+            settings = new CSVSettings(Path.Combine(_outputFolder, "Orders.txt"), delimiter, false, false);
             //settings.SetColumnValueQuoted(orderData);
             CSVFile.WriteDataTable(settings, orderData, true);
 
-            settings = new CSVSettings(Path.Combine(outputFolder, "OrderItems.txt"), delimiter, false, false);
+            settings = new CSVSettings(Path.Combine(_outputFolder, "OrderItems.txt"), delimiter, false, false);
             //settings.SetColumnValueQuoted(orderItemData);
             CSVFile.WriteDataTable(settings, orderItemData, true);
         }

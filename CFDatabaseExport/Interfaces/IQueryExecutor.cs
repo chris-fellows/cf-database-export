@@ -11,7 +11,7 @@ namespace CFDatabaseExport
     internal interface IQueryExecutor
     {
         void ExecuteQuery(Query queryObject, QueryOptions queryOptions, IQueryHandler queryHandler,
-                    IQueryService queryRepository, IQueryFunctionService queryFunctionRepository,
+                    IQueryService queryService, IQueryFunctionService queryFunctionService,
                     CFUtilities.Databases.ISQLGenerator sqlGenerator, IProgress progress,
                     CancellationToken cancellationToken);
     }

@@ -9,7 +9,17 @@ namespace CFDatabaseExport
     /// </summary>
     public interface IQueryFunctionService
     {
+        QueryFunction GetByID(Guid id);
+
         List<QueryFunction> GetAll();
-        void Add(List<QueryFunction> queryFunctions);
+
+        void Delete(Guid id);
+
+        void Add(QueryFunction queryFunction);
+
+        void Update(QueryFunction queryFunction);
+
+        //List<QueryFunction> GetAll();
+        //void Add(List<QueryFunction> queryFunctions);
     }
 }

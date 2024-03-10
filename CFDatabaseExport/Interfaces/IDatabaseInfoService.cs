@@ -9,6 +9,14 @@ namespace CFDatabaseExport
 {
     public interface IDatabaseInfoService
     {
+        DatabaseInfo GetByID(Guid id);
+
         List<DatabaseInfo> GetAll();
+
+        void Delete(Guid id);
+
+        void Add(DatabaseInfo databaseInfo);
+
+        void Update(DatabaseInfo databaseInfo);
     }
 }

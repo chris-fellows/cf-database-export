@@ -25,7 +25,7 @@ namespace CFDatabaseExport
         /// <param name="queryHandler"></param>
         /// <param name="cancellationToken">Cancellation token</param>
         public void ExecuteQuery(Query queryObject, QueryOptions queryOptions, IQueryHandler queryHandler, 
-                    IQueryService queryRepository, IQueryFunctionService queryFunctionRepository,
+                    IQueryService queryService, IQueryFunctionService queryFunctionService,
                     CFUtilities.Databases.ISQLGenerator sqlGenerator, IProgress progress,
                     CancellationToken cancellationToken)
         {
@@ -39,7 +39,7 @@ namespace CFDatabaseExport
             {
                 // Parse script functions            
                 var queryParserService = new QueryParserService();
-                string querySql = queryParserService.Parse(databaseConnection, query, queryRepository, queryFunctionRepository, sqlGenerator);
+                string querySql = queryParserService.Parse(databaseConnection, query, queryService, queryFunctionService, sqlGenerator);
 
                 if (!cancellationToken.IsCancellationRequested)
                 {

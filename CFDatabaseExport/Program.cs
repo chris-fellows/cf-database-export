@@ -51,7 +51,8 @@ namespace CFDatabaseExport
                 .ConfigureServices((context, services) => {
                     services.AddSingleton<ApplicationObject>((scope) =>
                     {
-                        return new ApplicationObject(Environment.CurrentDirectory);
+                        //return new ApplicationObject(Environment.CurrentDirectory);
+                        return new ApplicationObject("D:\\Data\\Temp\\CFDatabaseExportData");
                     });
                     services.AddTransient<ILogWriter>((scope) =>
                     {

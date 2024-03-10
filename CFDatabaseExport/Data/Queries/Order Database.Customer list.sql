@@ -1,0 +1,1 @@
+select C.*, (select sum(1) from Orders.txt O where O.CustomerID = C.CustomerID) AS OrderCount from Customers.txt C order by C.CustomerID

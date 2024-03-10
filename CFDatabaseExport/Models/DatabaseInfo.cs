@@ -16,6 +16,8 @@ namespace CFDatabaseExport.Models
         public Guid DatabaseTypeID { get; set; }
         [XmlAttribute("DisplayName")]
         public string DisplayName { get; set; }
+        [XmlAttribute("Description")]
+        public string Description { get; set; }
         [XmlAttribute("ConnectionString")]
         public string ConnectionString { get; set; }
         [XmlAttribute("SQLGenerator")]

@@ -171,6 +171,8 @@
     <Compile Include="ApplicationObject.cs" />
     <Compile Include="Exceptions\GeneralException.cs" />
     <Compile Include="Exceptions\HandleOptionsInvalidException.cs" />
+    <Compile Include="Interfaces\IDatabaseCreator.cs" />
+    <Compile Include="Interfaces\IDatabaseUtilities.cs" />
     <Compile Include="Models\ColumnFormat.cs" />
     <Compile Include="Models\ColumnFormats.cs" />
     <Compile Include="Controls\ListItemsUserControl.cs">
@@ -254,15 +256,16 @@
     <Compile Include="Models\QueryOptions\QueryOptionsJSON.cs" />
     <Compile Include="Models\QueryOptions\QueryOptionsXLS.cs" />
     <Compile Include="Models\QueryOptions\QueryOptionsXSLT.cs" />
+    <Compile Include="Services\Xml\XmlBaseService.cs" />
     <Compile Include="Services\Xml\XmlDatabaseInfoService.cs" />
     <Compile Include="Services\Xml\XmlDatabaseTypeService.cs" />
     <Compile Include="Services\Xml\XmlQueryFunctionService.cs" />
     <Compile Include="Services\Xml\XmlQueryService.cs" />
     <Compile Include="Models\SampleOutputFormat.cs" />
-    <Compile Include="Utilities\SampleUtilities.cs" />
+    <Compile Include="Demo\Order\OrderUtilities.cs" />
     <Compile Include="Models\ScriptFunction.cs" />
     <Compile Include="Models\ScriptFunctionSelectItem.cs" />
-    <Compile Include="Utilities\Database1Builder.cs" />
+    <Compile Include="Demo\Order\OrderCreator.cs" />
     <Compile Include="Utilities\DeveloperUtilities.cs" />
     <Compile Include="Models\ItemList.cs" />
     <Compile Include="Models\QueryFunction.cs" />

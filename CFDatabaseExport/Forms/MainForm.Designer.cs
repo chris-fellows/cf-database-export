@@ -54,8 +54,10 @@
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.tssStatus = new System.Windows.Forms.ToolStripStatusLabel();
-            this.toolStripProgressBar1 = new System.Windows.Forms.ToolStripProgressBar();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripProgressBar1 = new System.Windows.Forms.ToolStripProgressBar();
+            this.toolStripDropDownButton1 = new System.Windows.Forms.ToolStripDropDownButton();
+            this.createOrderDemoDatabaseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -227,7 +229,8 @@
             this.tsbRunSample,
             this.tscbSample,
             this.toolStripLabel1,
-            this.tsbRun});
+            this.tsbRun,
+            this.toolStripDropDownButton1});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(1109, 25);
@@ -300,10 +303,16 @@
             // tssStatus
             // 
             this.tssStatus.Name = "tssStatus";
-            this.tssStatus.Size = new System.Drawing.Size(956, 17);
+            this.tssStatus.Size = new System.Drawing.Size(937, 17);
             this.tssStatus.Spring = true;
             this.tssStatus.Text = "Ready";
             this.tssStatus.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // toolStripStatusLabel1
+            // 
+            this.toolStripStatusLabel1.AutoSize = false;
+            this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(5, 17);
             // 
             // toolStripProgressBar1
             // 
@@ -312,11 +321,23 @@
             this.toolStripProgressBar1.Name = "toolStripProgressBar1";
             this.toolStripProgressBar1.Size = new System.Drawing.Size(150, 16);
             // 
-            // toolStripStatusLabel1
+            // toolStripDropDownButton1
             // 
-            this.toolStripStatusLabel1.AutoSize = false;
-            this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(5, 17);
+            this.toolStripDropDownButton1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.createOrderDemoDatabaseToolStripMenuItem});
+            this.toolStripDropDownButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripDropDownButton1.Image")));
+            this.toolStripDropDownButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripDropDownButton1.Name = "toolStripDropDownButton1";
+            this.toolStripDropDownButton1.Size = new System.Drawing.Size(54, 22);
+            this.toolStripDropDownButton1.Text = "File";
+            // 
+            // createOrderDemoDatabaseToolStripMenuItem
+            // 
+            this.createOrderDemoDatabaseToolStripMenuItem.Enabled = false;
+            this.createOrderDemoDatabaseToolStripMenuItem.Name = "createOrderDemoDatabaseToolStripMenuItem";
+            this.createOrderDemoDatabaseToolStripMenuItem.Size = new System.Drawing.Size(225, 22);
+            this.createOrderDemoDatabaseToolStripMenuItem.Text = "Create Order demo database";
+            this.createOrderDemoDatabaseToolStripMenuItem.Click += new System.EventHandler(this.createOrderDemoDatabaseToolStripMenuItem_Click);
             // 
             // MainForm
             // 
@@ -374,6 +395,8 @@
         private System.Windows.Forms.ToolStripStatusLabel tssStatus;
         private System.Windows.Forms.ToolStripProgressBar toolStripProgressBar1;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
+        private System.Windows.Forms.ToolStripDropDownButton toolStripDropDownButton1;
+        private System.Windows.Forms.ToolStripMenuItem createOrderDemoDatabaseToolStripMenuItem;
     }
 }
 

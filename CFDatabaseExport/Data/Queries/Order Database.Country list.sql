@@ -1,0 +1,1 @@
+select * from Countries.txt order by CountryID
