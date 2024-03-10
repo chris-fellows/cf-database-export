@@ -169,6 +169,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplicationObject.cs" />
+    <Compile Include="Exceptions\GeneralException.cs" />
+    <Compile Include="Exceptions\HandleOptionsInvalidException.cs" />
     <Compile Include="Models\ColumnFormat.cs" />
     <Compile Include="Models\ColumnFormats.cs" />
     <Compile Include="Controls\ListItemsUserControl.cs">

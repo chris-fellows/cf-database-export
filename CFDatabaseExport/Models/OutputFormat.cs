@@ -41,6 +41,9 @@ namespace CFDatabaseExport.Models
             QueryOptions = queryOptions;
         }
 
+        /// <summary>
+        /// Applies query options being modified to the model
+        /// </summary>
         public void ApplyUserControlOptionsToModel()
         {
             if (OptionsUserControl != null)
@@ -50,14 +53,18 @@ namespace CFDatabaseExport.Models
             }
         }
 
-        public bool CanApplyUserControlOptionsToModel()
+        /// <summary>
+        /// Validates that the query options in the control are valid to apply
+        /// </summary>
+        /// <returns></returns>
+        public List<string> ValidateControlOptionsModel()
         {
             if (OptionsUserControl != null)
             {
                 IControlOptions controlOptions = (IControlOptions)OptionsUserControl;
-                return controlOptions.CanApplyToModel();
+                return controlOptions.ValidateModel();
             }
-            return true;
+            return new List<string>();
         }
     }
 }

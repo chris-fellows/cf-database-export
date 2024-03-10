@@ -7,6 +7,7 @@ using System.Data;
 using System.IO;
 using CarlosAg.ExcelXmlWriter;
 using CFDatabaseExport.Models;
+using System.Threading;
 
 namespace CFDatabaseExport.QueryHandlers
 {
@@ -15,7 +16,8 @@ namespace CFDatabaseExport.QueryHandlers
     /// </summary>
     public class QueryHandlerXLS : IQueryHandler
     {
-        public void Handle(SQLQuery query, QueryOptions queryOptionsX, List<DataTable> dataTables, IProgress progress)
+        public void Handle(SQLQuery query, QueryOptions queryOptionsX, List<DataTable> dataTables, IProgress progress,
+                        CancellationToken cancellationToken)
         {
             /*
             Workbook book = new Workbook();
@@ -75,9 +77,13 @@ namespace CFDatabaseExport.QueryHandlers
                 // Write data
                 for (int rowIndex = 0; rowIndex < dataTable.Rows.Count; rowIndex++)
                 {
-                    WorksheetRow row = GetLine(worksheet, queryOptions, dataTable, columnFormats, rowIndex);              
+                    WorksheetRow row = GetLine(worksheet, queryOptions, dataTable, columnFormats, rowIndex);
+
+                    if (cancellationToken.IsCancellationRequested) break;
+                    if (rowIndex % 100 == 0) System.Threading.Thread.Yield();
                 }
-                                
+
+                if (cancellationToken.IsCancellationRequested) break;
             }
 
             workbook.Save(queryOptions.FileName);
@@ -87,11 +93,7 @@ namespace CFDatabaseExport.QueryHandlers
         {
             return (queryOptions is QueryOptionsXLS);
         }
-
-        public bool VisibleOutput
-        {
-            get { return false; }
-        }
+        public bool VisibleOutput => false;
 
         private void SetColumnFormats(QueryOptions queryOptions, List<DataTable> dataTables)
         {

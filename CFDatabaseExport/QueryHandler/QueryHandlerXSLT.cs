@@ -8,6 +8,7 @@ using System.IO;
 using System.Xml;
 using System.Xml.Xsl;
 using CFDatabaseExport.Models;
+using System.Threading;
 
 namespace CFDatabaseExport.QueryHandlers
 {
@@ -16,7 +17,8 @@ namespace CFDatabaseExport.QueryHandlers
     /// </summary>
     public class QueryHandlerXSLT : IQueryHandler
     {
-        public void Handle(SQLQuery query, QueryOptions queryOptionsX, List<DataTable> dataTables, IProgress progress)
+        public void Handle(SQLQuery query, QueryOptions queryOptionsX, List<DataTable> dataTables, IProgress progress,
+                            CancellationToken cancellationToken)
         {
             SetColumnFormats(queryOptionsX, dataTables);
             QueryOptionsXSLT queryOptions = (QueryOptionsXSLT)queryOptionsX;
@@ -70,6 +72,8 @@ namespace CFDatabaseExport.QueryHandlers
                         xslt.Transform(xmlReader, (XsltArgumentList)null, writer);
                     }
                 }
+
+                if (cancellationToken.IsCancellationRequested) break;
             }
         }
 
@@ -78,10 +82,7 @@ namespace CFDatabaseExport.QueryHandlers
             return (queryOptions is QueryOptionsXSLT);
         }
 
-        public bool VisibleOutput
-        {
-            get { return false; }
-        }
+        public bool VisibleOutput => false;
 
         private void SetColumnFormats(QueryOptions queryOptions, List<DataTable> dataTables)
         {

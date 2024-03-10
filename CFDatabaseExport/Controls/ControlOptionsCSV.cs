@@ -7,9 +7,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using CFDatabaseExport.Exceptions;
 using CFDatabaseExport.Models;
 using CFDatabaseExport.Utilities;
 using CFUtilities;
+using System.CodeDom;
 
 namespace CFDatabaseExport.Controls
 {
@@ -30,11 +32,7 @@ namespace CFDatabaseExport.Controls
             InitializeComponent();
 
             this.QueryOptions = queryOptions;
-
-            txtDateFormat.Text = queryOptions.DateFormat;
-            txtNull.Text = queryOptions.NullString;
-            txtOutputFile.Text = queryOptions.FileName;
-
+          
             List<NameValuePair<Char>> delimeters = new List<NameValuePair<Char>>();
             delimeters.Add(new NameValuePair<Char>("Comma (,)", ','));
             delimeters.Add(new NameValuePair<Char>("Tab", (Char)9));
@@ -46,20 +44,41 @@ namespace CFDatabaseExport.Controls
             cboDelimiter.DisplayMember = "Name";
             cboDelimiter.ValueMember = "Value";
             cboDelimiter.DataSource = delimeters;
+
+            ModelToView(queryOptions);
+        }
+
+        private void ModelToView(QueryOptionsCSV queryOptions)
+        {
+            txtDateFormat.Text = queryOptions.DateFormat;
+            txtNull.Text = queryOptions.NullString;
+            txtOutputFile.Text = queryOptions.FileName;
             cboDelimiter.SelectedValue = queryOptions.Delimiter;
         }
 
-        public bool CanApplyToModel()
+        private void ViewToModel(QueryOptionsCSV queryOptions)
         {
-            return true;
+            queryOptions.FileName = txtOutputFile.Text;
+            queryOptions.DateFormat = txtDateFormat.Text;
+            queryOptions.NullString = txtNull.Text;
+            queryOptions.Delimiter = (Char)cboDelimiter.SelectedValue;
+        }
+
+        public List<string> ValidateModel()
+        {
+            var messages = new List<string>();
+            if (String.IsNullOrEmpty(txtOutputFile.Text)) messages.Add("Output file is invalid or not set");
+            if (String.IsNullOrEmpty(txtDateFormat.Text)) messages.Add("Date format is invalid or not set");            
+            return messages;
         }
 
         public void ApplyToModel()
         {
-            QueryOptions.FileName = txtOutputFile.Text;
-            QueryOptions.DateFormat = txtDateFormat.Text;
-            QueryOptions.NullString = txtNull.Text;
-            QueryOptions.Delimiter = (Char)cboDelimiter.SelectedValue;
+            if (ValidateModel().Any())
+            {
+                throw new HandleOptionsInvalidException("Cannot apply changes to model because they are invalid");
+            }
+            ViewToModel(QueryOptions);            
         }
 
         private void btnSelectOutputFile_Click(object sender, EventArgs e)

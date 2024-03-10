@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using CFDatabaseExport.Models;
 using CFDatabaseExport.Utilities;
 using CFUtilities;
+using CFDatabaseExport.Exceptions;
 
 namespace CFDatabaseExport.Controls
 {
@@ -30,30 +31,39 @@ namespace CFDatabaseExport.Controls
             InitializeComponent();
 
             this.QueryOptions = queryOptions;
+         
+            ModelToView(queryOptions);
+        }
 
+        private void ModelToView(QueryOptionsJSON queryOptions)
+        {
             txtDateFormat.Text = queryOptions.DateFormat;
             txtNull.Text = queryOptions.NullString;
             txtOutputFile.Text = queryOptions.FileName;
-
-            List<NameValuePair<Char>> delimeters = new List<NameValuePair<Char>>();
-            delimeters.Add(new NameValuePair<Char>("Comma (,)", ','));
-            delimeters.Add(new NameValuePair<Char>("Tab", (Char)9));
-            delimeters.Add(new NameValuePair<Char>("Semi-colon (;)", ';'));
-            delimeters.Add(new NameValuePair<Char>("Pipe (|)", '|'));
-            delimeters.Add(new NameValuePair<Char>("Hash (#)", '#'));
-            delimeters.Add(new NameValuePair<Char>("Zero", (Char)0));
         }
 
-        public bool CanApplyToModel()
+        private void ViewToModel(QueryOptionsJSON queryOptions)
         {
-            return true;
+            queryOptions.FileName = txtOutputFile.Text;
+            queryOptions.DateFormat = txtDateFormat.Text;
+            queryOptions.NullString = txtNull.Text;
+        }
+
+        public List<string> ValidateModel()
+        {
+            var messages = new List<string>();
+            if (String.IsNullOrEmpty(txtOutputFile.Text)) messages.Add("Output file is invalid or not set");
+            if (String.IsNullOrEmpty(txtDateFormat.Text)) messages.Add("Date format is invalid or not set");            
+            return messages;
         }
 
         public void ApplyToModel()
         {
-            QueryOptions.FileName = txtOutputFile.Text;
-            QueryOptions.DateFormat = txtDateFormat.Text;
-            QueryOptions.NullString = txtNull.Text;            
+            if (ValidateModel().Any())
+            {
+                throw new HandleOptionsInvalidException("Cannot apply changes to model because they are invalid");
+            }
+            ViewToModel(QueryOptions);
         }
 
         private void btnSelectOutputFile_Click(object sender, EventArgs e)

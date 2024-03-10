@@ -8,6 +8,7 @@ using System.Data.OleDb;
 using CFDatabaseExport.Models;
 using CFDatabaseExport.QueryHandlers;
 using CFUtilities.Databases;
+using System.Threading;
 
 namespace CFDatabaseExport
 {
@@ -17,14 +18,16 @@ namespace CFDatabaseExport
     internal class SQLQueryExecutor : IQueryExecutor
     {
         /// <summary>
-        /// Runs the query
+        /// Runs the query and handles the results
         /// </summary>
         /// <param name="query"></param>
         /// <param name="queryOptions"></param>
         /// <param name="queryHandler"></param>
+        /// <param name="cancellationToken">Cancellation token</param>
         public void ExecuteQuery(Query queryObject, QueryOptions queryOptions, IQueryHandler queryHandler, 
                     IQueryService queryRepository, IQueryFunctionService queryFunctionRepository,
-                    CFUtilities.Databases.ISQLGenerator sqlGenerator, IProgress progress)
+                    CFUtilities.Databases.ISQLGenerator sqlGenerator, IProgress progress,
+                    CancellationToken cancellationToken)
         {
             var query = (SQLQuery)queryObject;        
 
@@ -32,27 +35,33 @@ namespace CFDatabaseExport
             var databaseConnection = new OleDbDatabase(queryOptions.ConnectionString);
             databaseConnection.Open();
 
-            // Parse script functions            
-            var queryParserService = new QueryParserService();            
-            string querySql = queryParserService.Parse(databaseConnection, query, queryRepository, queryFunctionRepository, sqlGenerator);
-
-            OleDbDataReader reader = null;
-            if (query.HasResultset)
-            {                             
-                // Run query
-                reader = databaseConnection.ExecuteReader(System.Data.CommandType.Text, querySql, CommandBehavior.Default, null);
-
-                // Get data tables, one per resultset
-                var dataTables = OleDbDatabase.GetDataTables(reader);
-                //int rowCount = dataTables[0].Rows.Count;
-
-                // Handle result
-                queryHandler.Handle(query, queryOptions, dataTables, progress);
-            }
-            else
+            if (!cancellationToken.IsCancellationRequested)
             {
-                // Run query
-                databaseConnection.ExecuteNonQuery(System.Data.CommandType.Text, query.SQL, null, null);
+                // Parse script functions            
+                var queryParserService = new QueryParserService();
+                string querySql = queryParserService.Parse(databaseConnection, query, queryRepository, queryFunctionRepository, sqlGenerator);
+
+                if (!cancellationToken.IsCancellationRequested)
+                {
+                    OleDbDataReader reader = null;
+                    if (query.HasResultset)
+                    {
+                        // Run query
+                        reader = databaseConnection.ExecuteReader(System.Data.CommandType.Text, querySql, CommandBehavior.Default, null);
+
+                        // Get data tables, one per resultset
+                        var dataTables = OleDbDatabase.GetDataTables(reader);
+                        //int rowCount = dataTables[0].Rows.Count;
+
+                        // Handle result
+                        queryHandler.Handle(query, queryOptions, dataTables, progress, cancellationToken);
+                    }
+                    else
+                    {
+                        // Run query
+                        databaseConnection.ExecuteNonQuery(System.Data.CommandType.Text, query.SQL, null, null);
+                    }
+                }
             }
             databaseConnection.Close();
         }

@@ -7,6 +7,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.IO;
 using CFDatabaseExport.Models;
+using System.Threading;
 
 namespace CFDatabaseExport.QueryHandlers
 {
@@ -15,7 +16,8 @@ namespace CFDatabaseExport.QueryHandlers
     /// </summary>
     public class QueryHandlerCSV : IQueryHandler
     {
-        public void Handle(SQLQuery query, QueryOptions queryOptionsX, List<DataTable> dataTables, IProgress progress)
+        public void Handle(SQLQuery query, QueryOptions queryOptionsX, List<DataTable> dataTables, IProgress progress,
+                            CancellationToken cancellationToken)
         {
             SetColumnFormats(queryOptionsX, dataTables);
             QueryOptionsCSV queryOptions = (QueryOptionsCSV)queryOptionsX;
@@ -66,22 +68,24 @@ namespace CFDatabaseExport.QueryHandlers
                     { 
                         string line = GetLine(queryOptions, dataTable, columnFormats, rowIndex);
                         writer.WriteLine(line);
+
+                        if (cancellationToken.IsCancellationRequested) break;
+                        if (rowIndex % 100 == 0) System.Threading.Thread.Yield();
                     }
                     writer.Flush();
                     writer.Close();
                 }
+
+                if (cancellationToken.IsCancellationRequested) break;
             }
-        }
+        }    
 
         public bool Supports(QueryOptions queryOptions)
         {
             return (queryOptions is QueryOptionsCSV);
         }
 
-        public bool VisibleOutput
-        {
-            get { return false; }
-        }
+        public bool VisibleOutput => false;        
 
         private void SetColumnFormats(QueryOptions queryOptions, List<DataTable> dataTables)
         {

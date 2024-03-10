@@ -27,24 +27,7 @@ namespace CFDatabaseExport
         }      
 
         public List<Query> GetAll()
-        {
-            /* Create query XML files from SQL files
-            foreach (string file in Directory.GetFiles(_folder, "*.sql", SearchOption.AllDirectories))
-            {
-                SQLQuery sqlQuery = new SQLQuery()
-                {
-                    ID = Guid.NewGuid(),
-                    DatabaseID = new Guid("60e772a8-f934-44f4-bfa7-864f6c0def43"),
-                    HasResultset = true,
-                    Name = Path.GetFileNameWithoutExtension(file),
-                    QueryFile = file                   
-                };
-
-                string filename = Path.Combine(_folder, string.Format("{0}{1}", sqlQuery.ID, ".xml"));
-                XmlSerialization.SerializeToFile<Query>(sqlQuery, filename);
-            }
-            */
-
+        {          
             List<Query> queryList = new List<Query>();                
             foreach (string file in Directory.GetFiles(_folder, "*.xml"))
             {

@@ -2,13 +2,17 @@
 
 Tool for exporting data from any OLEDB database to CSV, HTML, XML, Excel, text file or a SQL script. The tool provides
 the user with a list of databases and each database has a set of available queries. The user selects the database, then
-selects the query, selects the output format (CSV, HTML etc), selects output format parameters and then executes the
-query to produce the output.
+selects the query, selects the output format (CSV, HTML etc), selects output format parameters (E.g. Output file name),
+selects any query data filter parameters (E.g. Filter by date range and/or by country) and then executes the query to produce
+the output.
+
+The tool enables developers to provide fast turnarounds to adhoc requests from users. Users don't need to have any 
+alternative query tools installed such as SQL Management Studio or Excel.
 
 Output Formats
 --------------
 
-- Delimited file (CSV): Output each resultset to a separate file.
+- Delimited file (CSV): Outputs each resultset to a separate file.
 - Excel file: This may be removed later because it uses a third party library.
 - HTML: Takes a template HTML file and inserts an HTML Table element with each resultset returned by the query.
 - XML: Exports all rows to an XML file.
@@ -18,8 +22,8 @@ Output Formats
 that transforms the data and inserts it in to another table.
 - Text file from XSL transform: Takes an XSLT file, processes the query results and creates a new file.
 
-Query Parameters
-----------------
+Data Filter Parameters
+----------------------
 
 The user can be prompted for parameters for the SQL query at runtime. Typically the parameters would filter the data
 that is returned from the query. E.g. The user is prompted to select one or more countries from a list and the query
@@ -48,6 +52,9 @@ Example 2 (Select multiple parameters from a query list)
 - The SQL is changed to replace the ##SelectCountries reference and assign the @CountryIDs table variable.
 - The SQL query is executed and it filters the data for the selected countries.
 
+Comments
+--------
+- This repo currently has a dependency on the cf-utilities repo. Ideally it should be a NuGet package.
 
 
 

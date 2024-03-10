@@ -10,6 +10,8 @@ using CFUtilities;
 using CFUtilities.XML;
 using CFUtilities.Logging;
 using CFUtilities.Databases;
+using CFDatabaseExport.Exceptions;
+using System.Threading;
 
 namespace CFDatabaseExport.Forms
 {
@@ -28,6 +30,7 @@ namespace CFDatabaseExport.Forms
         private readonly IEnumerable<IQueryHandler> _queryHandlers;
         private List<DatabaseInfo> _databaseInfoList = new List<DatabaseInfo>();
         private readonly IEnumerable<ISQLGenerator> _sqlGenerators = null;
+        private CancellationTokenSource _queryCancelTokenSource = null;
 
         public MainForm(ApplicationObject applicationObject,
                     IDatabaseInfoService databaseInfoService,
@@ -58,15 +61,47 @@ namespace CFDatabaseExport.Forms
             _sqlGenerators = sqlGenerators;
 
             //CreateData();
-            InitializeScreen();
+            InitialiseView();
             tscbDatabase.SelectedIndex = 0;
 
             DisplayStatus("Ready");
         }
 
-        public void SetStatusMessage(CFUtilities.Message message)
+        /// <summary>
+        /// Set view for query active
+        /// </summary>
+        private void SetViewQueryActive()
         {
-            
+            tsbRun.Text = "Cancel";           
+            toolStripProgressBar1.Value = 0;
+        }
+
+        /// <summary>
+        /// Set vew for query not active
+        /// </summary>
+        private void SetViewQueryInactive()
+        {
+            tsbRun.Text = "Run query";            
+            toolStripProgressBar1.Value = 0;
+        }
+
+        /// <summary>
+        /// Handles progress status message when running query
+        /// </summary>
+        /// <param name="message"></param>
+        void IProgress.SetStatusMessage(CFUtilities.Message message)
+        {
+            // Not currently set
+        }
+
+        /// <summary>
+        /// Handles items done when running query
+        /// </summary>
+        /// <param name="itemsDone"></param>
+        /// <param name="itemsTotal"></param>
+        void IProgress.SetItemsDone(int itemsDone, int itemsTotal)
+        {          
+            if (itemsTotal > 0) toolStripProgressBar1.Value = (int)((itemsDone / itemsTotal) * 100);            
         }
 
         //private void CreateData()
@@ -92,9 +127,11 @@ namespace CFDatabaseExport.Forms
         //    XmlSerialization.SerializeToFile<ItemList<DatabaseInfo>>(databaseInfoList, System.IO.Path.Combine(_applicationObject.DatabaseInfoFolder, "Database Info.xml"));
         //}
 
-        private void InitializeScreen()
-        {
-            //IDatabaseInfoRepository databaseInfoRepository = new XmlDatabaseInfoRepository(ApplicationObject.DatabaseInfoFolder);
+        /// <summary>
+        /// Initialises view
+        /// </summary>
+        private void InitialiseView()
+        {            
             _databaseInfoList = _databaseInfoService.GetAll();
             tscbDatabase.Items.Clear();            
             foreach(DatabaseInfo databaseInfo in _databaseInfoList)
@@ -319,23 +356,70 @@ namespace CFDatabaseExport.Forms
 
         private void tsbRun_Click(object sender, EventArgs e)
         {
-            RunQuery();
-        }
+            switch (tsbRun.Text)
+            {
+                case "Run query":
+                    try
+                    {
+                        RunQuery();
+                        //var task = RunQueryAsync();
+                    }
+                    catch (HandleOptionsInvalidException)
+                    {
+                        MessageBox.Show("The options are invalid");
+                    }
+                    catch (Exception exception)
+                    {
+                        MessageBox.Show($"Error running the query:\n{exception.Message}", "Error");
+                    }
+                    finally
+                    {
+                        SetViewQueryInactive();
+                        DisplayStatus("Ready");
+                    }
+                    break;
+                case "Cancel":          
+                    _queryCancelTokenSource.Cancel();
+                    break;
+            }
+        }               
 
         private void DisplayStatus(string status)
         {
             tssStatus.Text = string.Format(" {0}", status).Trim();            
         }
+        
+        /// <summary>
+        /// Runs action in main thread. This is typically for actions that interact with the UI.
+        /// </summary>
+        /// <param name="action"></param>
+        private void RunInMainThread(Action action)
+        {
+            this.Invoke((Action)delegate
+            {
+                action();
+            });
+        }
 
+        /// <summary>
+        /// Runs query and handles the output. Either generates output files (CSV, HTML etc) or displays output to the
+        /// screen.
+        /// 
+        /// TODO: Change this to run in a background thread. We need to change the handling to the screen to update in
+        /// the main thread.
+        /// </summary>
         private void RunQuery()
         {                
-            SQLQuery query = SelectedSqlQuery;
-            //IQueryRepository queryRepository = _queryRespository;           
-
+            var query = SelectedSqlQuery;          
             OutputFormat outputFormat = (OutputFormat)cboOutputFormat.SelectedItem;
-            if (outputFormat.CanApplyUserControlOptionsToModel())
+            var optionsControlMessages = outputFormat.ValidateControlOptionsModel();
+            if (!optionsControlMessages.Any())     // Query options valid
             {
-                DisplayStatus("Running query...");
+                _queryCancelTokenSource = new CancellationTokenSource();
+
+                SetViewQueryActive();
+
+                RunInMainThread(() => DisplayStatus("Running query..."));   // For multi-threading              
 
                 QueryOptions queryOptions = GetQueryOptions();
 
@@ -348,20 +432,21 @@ namespace CFDatabaseExport.Forms
                 {
                     tabControl1.SelectedTab = tabPage2; // Select Results
                 }
-                queryExecutor.ExecuteQuery(query, queryOptions, queryHandler, _queryRespository, _queryFunctionService, sqlGenerator, this);
-
+                queryExecutor.ExecuteQuery(query, queryOptions, queryHandler, _queryRespository, _queryFunctionService,
+                                sqlGenerator, this, _queryCancelTokenSource.Token);
+                
                 // Open output folder, not necessary for grid output
                 if (outputFormat.QueryOptions as QueryOptionsGrid == null)
                 {
                     IOUtilities.OpenDirectoryWithExplorer(_applicationObject.OutputFolder);
                 }
 
-                DisplayStatus("Ready");
-                //MessageBox.Show("Query run", "Run");
+                RunInMainThread(() => DisplayStatus("Ready"));        // For multi-threading         
             }
-            else
+            else    // Query options invalid (E.g. Template file does not exist)
             {
-                MessageBox.Show("Cannot run the query because the options are invalid", "Error");
+                //throw new HandleOptionsInvalidException();
+                RunInMainThread(() => MessageBox.Show($"The options are invalid:\n{optionsControlMessages[0]}", "Error"));
             }
         }
 
@@ -370,13 +455,12 @@ namespace CFDatabaseExport.Forms
         /// </summary>
         private void RunSampleQuery()
         {
+            var tokenSource = new CancellationTokenSource();
+
             //SQLQuery query = SelectedSqlQuery;
             IQueryService queryRepository = _queryRespository;
 
-            SampleOutputFormat sampleOutputFormat = (SampleOutputFormat)tscbSample.ComboBox.SelectedItem;
-            //OutputFormat outputFormat = (OutputFormat)cboOutputFormat.SelectedItem;
-            //if (outputFormat.CanApplyUserControlOptionsToModel())
-            //{
+            SampleOutputFormat sampleOutputFormat = (SampleOutputFormat)tscbSample.ComboBox.SelectedItem;           
             QueryOptions queryOptions = sampleOutputFormat.OutputFormat.QueryOptions;
             queryOptions.ConnectionString = sampleOutputFormat.DatabaseInfo.ConnectionString;
 
@@ -384,22 +468,18 @@ namespace CFDatabaseExport.Forms
             var sqlGenerator = _sqlGenerators.FirstOrDefault(sg => sg.GetType().Name.Contains(SelectedDatabaseInfo.SQLGenerator));
 
             var queryHandler = _queryHandlers.ToList().Find(item => (item.Supports(queryOptions)));
-                IQueryExecutor queryExecutor = new SQLQueryExecutor();
-                if (queryHandler.VisibleOutput)
-                {
-                    tabControl1.SelectedTab = tabPage2; // Select Results
-                }
-                queryExecutor.ExecuteQuery(sampleOutputFormat.SQLQuery, queryOptions, queryHandler, queryRepository, null, sqlGenerator, this);
+            IQueryExecutor queryExecutor = new SQLQueryExecutor();
+            if (queryHandler.VisibleOutput)
+            {
+                tabControl1.SelectedTab = tabPage2; // Select Results
+            }
+            queryExecutor.ExecuteQuery(sampleOutputFormat.SQLQuery, queryOptions, queryHandler, queryRepository, 
+                            null, sqlGenerator, this, tokenSource.Token);
 
-                // Open output folder
-                IOUtilities.OpenDirectoryWithExplorer(_applicationObject.OutputFolder);
+            // Open output folder
+            IOUtilities.OpenDirectoryWithExplorer(_applicationObject.OutputFolder);
 
-                MessageBox.Show("Query run", "Run");
-            //}
-            //else
-            //{
-            //    MessageBox.Show("Cannot run the query because the options are invalid", "Error");
-            //}
+            MessageBox.Show("Query run", "Run");        
         }
 
         private void toolStripLabel1_Click(object sender, EventArgs e)
@@ -409,7 +489,22 @@ namespace CFDatabaseExport.Forms
 
         private void tsbRunSample_Click(object sender, EventArgs e)
         {
-            RunSampleQuery();
+            try
+            {
+                RunSampleQuery();
+            }
+            catch (HandleOptionsInvalidException)
+            {
+                MessageBox.Show("The options are invalid");
+            }
+            catch (Exception exception)
+            {
+                MessageBox.Show($"Error running the sample query:\n{exception.Message}", "Error");
+            }
+            finally
+            {
+                DisplayStatus("Ready");
+            }            
         }
     }
 }

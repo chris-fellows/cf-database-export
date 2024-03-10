@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Data;
 using System.Data.SqlClient;
 using CFDatabaseExport.Models;
+using System.Threading;
 
 namespace CFDatabaseExport.QueryHandlers
 {
@@ -21,7 +22,8 @@ namespace CFDatabaseExport.QueryHandlers
         {
             
         }
-        public void Handle(SQLQuery query, QueryOptions queryOptionsX, List<DataTable> dataTables, IProgress progress)
+        public void Handle(SQLQuery query, QueryOptions queryOptionsX, List<DataTable> dataTables, IProgress progress,
+                        CancellationToken cancellationToken)
         {
             SetColumnFormats(queryOptionsX, dataTables);
             QueryOptionsSQL queryOptions = (QueryOptionsSQL)queryOptionsX;
@@ -57,6 +59,9 @@ namespace CFDatabaseExport.QueryHandlers
                 {
                     string line = GetLine(queryOptions, dataTable, columnFormats, rowIndex);
                     lines.Append(line);
+
+                    if (cancellationToken.IsCancellationRequested) break;
+                    if (rowIndex % 100 == 0) System.Threading.Thread.Yield();
                 }
 
                 using (StreamWriter writer = new StreamWriter(filename, true))
@@ -69,6 +74,8 @@ namespace CFDatabaseExport.QueryHandlers
                     writer.Flush();
                     writer.Close();
                 }
+
+                if (cancellationToken.IsCancellationRequested) break;
             }
         }
 
@@ -77,10 +84,7 @@ namespace CFDatabaseExport.QueryHandlers
             return (queryOptions is QueryOptionsSQL);
         }
 
-        public bool VisibleOutput
-        {
-            get { return false; }
-        }
+        public bool VisibleOutput => false;
 
         private void SetColumnFormats(QueryOptions queryOptions, List<DataTable> dataTables)
         {

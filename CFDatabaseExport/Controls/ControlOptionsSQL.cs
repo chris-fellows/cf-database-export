@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using CFDatabaseExport.Models;
 using CFDatabaseExport.Utilities;
+using CFDatabaseExport.Exceptions;
 
 namespace CFDatabaseExport.Controls
 {
@@ -50,32 +51,47 @@ namespace CFDatabaseExport.Controls
             }
         }
 
-
         public ControlOptionsSQL(QueryOptionsSQL queryOptions)
         {
             InitializeComponent();
 
             this.QueryOptions = queryOptions;
+            
+            txtComments.Text = Comments;
 
+            ModelToView(queryOptions);
+        }
+
+        private void ModelToView(QueryOptionsSQL queryOptions)
+        {
             txtTemplateSQLFile.Text = queryOptions.TemplateSQLFile;
             txtRowTemplateSQL.Text = queryOptions.RowTemplateSQL;
             txtOutputFile.Text = queryOptions.FileName;
-
-            txtComments.Text = Comments;
         }
 
-        public bool CanApplyToModel()
+        private void ViewToModel(QueryOptionsSQL queryOptions)
         {
-            return true;
+            queryOptions.RowTemplateSQL = txtRowTemplateSQL.Text;
+            queryOptions.DateFormat = this.QueryOptions.DateFormat;
+            queryOptions.NullString = "NULL";
+            queryOptions.FileName = txtOutputFile.Text;
+        }
+
+        public List<string> ValidateModel()
+        {
+            var messages = new List<string>();
+            if (String.IsNullOrEmpty(txtOutputFile.Text)) messages.Add("Output file is invalid or not set");
+            if (String.IsNullOrEmpty(txtRowTemplateSQL.Text)) messages.Add("Row template is invalid or not set");            
+            return messages;
         }
 
         public void ApplyToModel()
         {
-            QueryOptions.TemplateSQLFile = txtTemplateSQLFile.Text;
-            QueryOptions.RowTemplateSQL = txtRowTemplateSQL.Text;
-            QueryOptions.DateFormat = this.QueryOptions.DateFormat;
-            QueryOptions.NullString = "NULL";
-            QueryOptions.FileName = txtOutputFile.Text;        
+            if (ValidateModel().Any())
+            {
+                throw new HandleOptionsInvalidException("Cannot apply changes to model because they are invalid");
+            }
+            ViewToModel(QueryOptions);         
         }
 
         private void btnSelectTemplateSQLFile_Click(object sender, EventArgs e)
